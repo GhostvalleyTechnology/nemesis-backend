@@ -1,10 +1,12 @@
 timeout: 1800s
 
 steps:
-  - name: maven:3-jdk-11
-    entrypoint: mvn
+  - name: 'gcr.io/cloud-builders/docker'
     args:
-      - package
-      - -Pnative
-      - -Dquarkus.native.container-build=true
-      - --batch-mode
+      - -f
+      - src/main/docker/Dockerfile.native-multistage
+      - -t
+      - gcr.io/$PROJECT_ID/nemesis-backend:$BRANCH_NAME
+      - .
+images:
+  - gcr.io/$PROJECT_ID/nemesis-backend:$BRANCH_NAME
