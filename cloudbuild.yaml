@@ -7,3 +7,4 @@ steps:
       - package
       - -Pnative
       - -Dquarkus.native.container-build=true
+      - --batch-mode
