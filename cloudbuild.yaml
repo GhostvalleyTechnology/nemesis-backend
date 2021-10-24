@@ -3,6 +3,7 @@ timeout: 1800s
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
+      - build
       - -f
       - src/main/docker/Dockerfile.native-multistage
       - -t
