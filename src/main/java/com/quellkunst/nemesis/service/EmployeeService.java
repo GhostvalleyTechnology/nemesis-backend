@@ -1,4 +1,4 @@
-package com.ghostvalley.service;
+package com.quellkunst.nemesis.service;
 
 import javax.ws.rs.Path;
 

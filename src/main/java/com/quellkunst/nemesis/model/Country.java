@@ -1,4 +1,4 @@
-package com.ghostvalley.model;
+package com.quellkunst.nemesis.model;
 
 import lombok.Builder;
 import lombok.NoArgsConstructor;

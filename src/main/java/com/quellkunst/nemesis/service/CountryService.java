@@ -1,6 +1,6 @@
-package com.ghostvalley.service;
+package com.quellkunst.nemesis.service;
 
-import com.ghostvalley.model.Country;
+import com.quellkunst.nemesis.model.Country;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;

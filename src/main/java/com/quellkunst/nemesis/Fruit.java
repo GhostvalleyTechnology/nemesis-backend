@@ -1,4 +1,4 @@
-package com.ghostvalley;
+package com.quellkunst.nemesis;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import lombok.AllArgsConstructor;

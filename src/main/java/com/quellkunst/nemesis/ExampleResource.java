@@ -1,4 +1,4 @@
-package com.ghostvalley;
+package com.quellkunst.nemesis;
 
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;

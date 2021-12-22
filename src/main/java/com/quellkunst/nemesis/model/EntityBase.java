@@ -1,4 +1,4 @@
-package com.ghostvalley.model;
+package com.quellkunst.nemesis.model;
 
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;

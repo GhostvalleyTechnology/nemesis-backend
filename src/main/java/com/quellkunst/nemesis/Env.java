@@ -1,4 +1,4 @@
-package com.ghostvalley;
+package com.quellkunst.nemesis;
 
 public class Env {
     public static class Roles {

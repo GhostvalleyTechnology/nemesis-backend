@@ -1,11 +1,11 @@
-package com.ghostvalley.model;
+package com.quellkunst.nemesis.model;
 
-import lombok.NoArgsConstructor;
-
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import lombok.NoArgsConstructor;
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -19,6 +19,7 @@ public abstract class Person extends EntityBase {
     public String occupation;
     public LocalDateTime createdAt;
 
+    @Column(unique = true)
     public String email;
     public String phone;
     public String mobile;
