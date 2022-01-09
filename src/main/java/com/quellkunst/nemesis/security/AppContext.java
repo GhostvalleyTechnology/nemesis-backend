@@ -1,25 +1,42 @@
 package com.quellkunst.nemesis.security;
 
-import static com.quellkunst.nemesis.security.ExceptionSupplier.theException;
-
-import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import com.quellkunst.nemesis.model.Employee;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.Optional;
+
+import static com.quellkunst.nemesis.security.ExceptionSupplier.theException;
 
 @ApplicationScoped
 public class AppContext implements Context {
 
-  private final IllegalCallerException EMAIL_NOT_CONFIGURED = new IllegalCallerException(
-      "E-Mail Address is not configured.");
+    @Inject
+    JsonWebToken idToken;
 
-  @Inject
-  JsonWebToken idToken;
+    private String getClaim(Claims claim) {
+        Optional<String> jwtEmail = idToken.claim(claim);
+        return jwtEmail.orElseThrow(claimException(claim));
+    }
 
-  @Override
-  public String getEmail() {
-    Optional<String> jwtEmail = idToken.claim(Claims.email);
-    return jwtEmail.orElseThrow(theException(EMAIL_NOT_CONFIGURED));
-  }
+    private boolean isAdmin() {
+        return Employee.getByEmail(getClaim(Claims.email)).isAdminRights();
+    }
+
+    private ExceptionSupplier<IllegalCallerException> claimException(Claims claim) {
+        var msg = claim.getDescription() + "not configured!";
+        return theException(new IllegalCallerException(msg));
+    }
+
+    @Override
+    public User getUser() {
+        return User.builder()
+                .name(getClaim(Claims.full_name))
+                .email(getClaim(Claims.email))
+                .admin(isAdmin()).build();
+    }
+
+
 }

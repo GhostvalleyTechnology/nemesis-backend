@@ -1,17 +1,17 @@
 package com.quellkunst.nemesis.model;
 
-import static com.quellkunst.nemesis.security.ExceptionSupplier.theException;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import com.quellkunst.nemesis.security.ExceptionSupplier;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import static com.quellkunst.nemesis.security.ExceptionSupplier.illegalCallerException;
 
 @Entity
 @NoArgsConstructor
@@ -33,6 +33,6 @@ public class Employee extends Person {
     }
 
     public static Employee getByEmail(String email) {
-        return findByEmail(email).orElseThrow(theException(new IllegalCallerException("E-Mail '"+email+"' not found.")));
+        return findByEmail(email).orElseThrow(illegalCallerException("E-Mail '" + email + "' not found."));
     }
 }
