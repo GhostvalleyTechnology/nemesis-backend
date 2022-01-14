@@ -17,7 +17,7 @@ public class Reminder extends EntityBase {
     @ManyToOne
     public Employee employee;
     @Column(nullable = false)
-    @Builder.Default public ReminderType type = ReminderType.generic;
+    public ReminderType type;
     public String name;
     public String text;
     public LocalDate due;

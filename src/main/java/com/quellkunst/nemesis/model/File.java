@@ -11,16 +11,13 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
-public class Document extends EntityBase {
-
-    public String name;
+public class File extends EntityBase {
     @Lob
-    @Basic(fetch=LAZY)
+    @Basic(fetch = LAZY)
     public byte[] data;
 
     @Builder
-    public Document(String name, byte[] data) {
-        this.name = name;
+    public File(byte[] data) {
         this.data = data;
     }
 }

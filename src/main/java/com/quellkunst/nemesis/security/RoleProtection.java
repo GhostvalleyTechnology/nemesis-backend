@@ -16,7 +16,7 @@ public class RoleProtection implements RoleProtected {
 
     @Override
     public <T> T asAdmin(AdminCommand<T> action) {
-        if (context.getCurrentEmployee().isAdmin()) {
+        if (context.getCurrentEmployee().admin) {
             return action.run();
         }
         throw INSUFFICIENT_RIGHTS;
@@ -32,7 +32,7 @@ public class RoleProtection implements RoleProtected {
 
     @Override
     public <T> T asSuperAdmin(AdminCommand<T> action) {
-        if("admin@quellkunst.com".equals(context.getEmail())) {
+        if ("admin@quellkunst.com".equals(context.getEmail())) {
             Log.info("The SuperAdmin has been called!");
             return action.run();
         }
