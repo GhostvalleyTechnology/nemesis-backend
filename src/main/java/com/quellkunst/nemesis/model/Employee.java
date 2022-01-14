@@ -4,28 +4,26 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
-import static com.quellkunst.nemesis.security.ExceptionSupplier.illegalCallerException;
+import static com.quellkunst.nemesis.security.ExceptionSupplier.unauthorizedException;
+
 
 @Entity
 @NoArgsConstructor
-@Getter
-public class Employee extends Person {
-    @OneToMany
-    public List<Client> clients;
-    public boolean adminRights;
+public class Employee extends EntityBase {
+    public String name;
+    @Column(unique = true)
+    public String email;
+    public boolean admin;
 
     @Builder
-    public Employee(Gender gender, String firstName, String lastName, String title, String academicDegree, LocalDate birthday, String occupation, LocalDateTime createdAt, String email, String phone, String mobile, Country country, String zipCode, String city, String address, List<Client> clients, boolean adminRights) {
-        super(gender, firstName, lastName, title, academicDegree, birthday, occupation, createdAt, email, phone, mobile, country, zipCode, city, address);
-        this.clients = clients;
-        this.adminRights = adminRights;
+    public Employee(String name, String email, boolean admin) {
+        this.name = name;
+        this.email = email;
+        this.admin = admin;
     }
 
     public static Optional<Employee> findByEmail(String email) {
@@ -33,6 +31,6 @@ public class Employee extends Person {
     }
 
     public static Employee getByEmail(String email) {
-        return findByEmail(email).orElseThrow(illegalCallerException("E-Mail '" + email + "' not found."));
+        return findByEmail(email).orElseThrow(unauthorizedException("E-Mail '" + email + "' not registered."));
     }
 }

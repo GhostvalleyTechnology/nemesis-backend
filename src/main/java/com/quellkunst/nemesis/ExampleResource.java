@@ -1,5 +1,6 @@
 package com.quellkunst.nemesis;
 
+import com.quellkunst.nemesis.security.Context;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
 import io.quarkus.oidc.IdToken;
@@ -15,8 +16,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/hello")
 public class ExampleResource {
     @Inject
-    @IdToken
-    JsonWebToken idToken;
+    Context context;
 
     @GET
     @Produces(MediaType.TEXT_HTML)
@@ -24,7 +24,7 @@ public class ExampleResource {
         return
                 "<html>\n" +
                         "    <body>\n" +
-                        "        <h1>Hello " + idToken.getClaim("email") + "</h1>\n" +
+                        "        <h1>Hello " + context.getEmail() + "</h1>\n" +
                         "    </body>\n" +
                         "</html>\n";
     }

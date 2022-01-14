@@ -1,5 +1,8 @@
 package com.quellkunst.nemesis.security;
 
+import com.quellkunst.nemesis.model.Employee;
+
 public interface Context {
-    User getUser();
+    String getEmail();
+    Employee getCurrentEmployee();
 }

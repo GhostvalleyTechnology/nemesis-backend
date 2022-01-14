@@ -1,5 +1,7 @@
 package com.quellkunst.nemesis.security;
 
+import io.quarkus.security.UnauthorizedException;
+
 import java.util.function.Supplier;
 
 public final class ExceptionSupplier<T extends Exception> implements Supplier<T> {
@@ -13,8 +15,8 @@ public final class ExceptionSupplier<T extends Exception> implements Supplier<T>
         return new ExceptionSupplier<>(exception);
     }
 
-    public static ExceptionSupplier<IllegalCallerException> illegalCallerException(String msg) {
-        return new ExceptionSupplier<IllegalCallerException>(new IllegalCallerException(msg));
+    public static ExceptionSupplier<UnauthorizedException> unauthorizedException(String msg) {
+        return new ExceptionSupplier<>(new UnauthorizedException(msg));
     }
 
     @Override

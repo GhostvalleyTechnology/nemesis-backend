@@ -1,7 +1,7 @@
 package com.quellkunst.nemesis.service;
 
+import com.quellkunst.nemesis.model.Employee;
 import com.quellkunst.nemesis.security.Context;
-import com.quellkunst.nemesis.security.User;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -14,7 +14,7 @@ public class UserService {
     Context context;
 
     @GET
-    public User get() {
-        return context.getUser();
+    public Employee get() {
+        return context.getCurrentEmployee();
     }
 }
