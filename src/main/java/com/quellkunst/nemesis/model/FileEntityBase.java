@@ -6,7 +6,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class FileEntityBase {
+public abstract class FileEntityBase extends EntityBase {
     public String fileName;
     public Long fileId;
 

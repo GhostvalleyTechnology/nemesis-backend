@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 
 @NoArgsConstructor
 @Entity
-public class PartnerLogin {
+public class PartnerLogin extends EntityBase {
     public String link;
     public String username;
     public String password;

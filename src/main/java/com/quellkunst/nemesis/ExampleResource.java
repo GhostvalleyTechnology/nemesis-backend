@@ -19,14 +19,9 @@ public class ExampleResource {
     Context context;
 
     @GET
-    @Produces(MediaType.TEXT_HTML)
+    @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        return
-                "<html>\n" +
-                        "    <body>\n" +
-                        "        <h1>Hello " + context.getEmail() + "</h1>\n" +
-                        "    </body>\n" +
-                        "</html>\n";
+        return context.getEmail();
     }
 
     @Inject

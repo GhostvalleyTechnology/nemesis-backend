@@ -24,7 +24,7 @@ public class AdminService {
     @Path("/add-employee")
     @Transactional
     public Response addEmployee(Employee emp) {
-        roleProtected.asSuperAdmin(() ->
+        roleProtected.asAdmin(() ->
                 emp.persist()
         );
         return Response.ok().build();
@@ -33,7 +33,7 @@ public class AdminService {
     @POST
     @Path("/list-employees")
     public List<Employee> getEmployees() {
-        return roleProtected.asSuperAdmin(() ->
+        return roleProtected.asAdmin(() ->
                 Employee.listAll()
         );
     }
@@ -42,7 +42,7 @@ public class AdminService {
     @Path("/daily")
     @Transactional
     public Response dailyTasks() {
-        roleProtected.asSuperAdmin(() ->
+        roleProtected.asAdmin(() ->
                 Reminder.getDueToday().forEach(this::sendReminderEmail)
         );
         return Response.ok().build();
