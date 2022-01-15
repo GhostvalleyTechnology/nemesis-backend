@@ -1,6 +1,6 @@
 package com.quellkunst.nemesis.service;
 
-import com.quellkunst.nemesis.security.Context;
+import com.quellkunst.nemesis.security.AppContext;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +13,8 @@ import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
 public class UserServiceTest {
-  @InjectMock Context context;
+  @InjectMock
+  AppContext context;
 
   @BeforeAll
   public static void init() {}

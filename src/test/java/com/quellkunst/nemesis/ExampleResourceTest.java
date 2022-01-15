@@ -1,6 +1,6 @@
 package com.quellkunst.nemesis;
 
-import com.quellkunst.nemesis.security.Context;
+import com.quellkunst.nemesis.security.AppContext;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.quarkus.test.security.TestSecurity;
@@ -13,7 +13,8 @@ import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
 public class ExampleResourceTest {
-  @InjectMock Context context;
+  @InjectMock
+  AppContext context;
 
   @BeforeEach
   public void setup() {
