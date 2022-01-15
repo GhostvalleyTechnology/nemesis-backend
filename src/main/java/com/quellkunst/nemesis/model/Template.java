@@ -7,5 +7,5 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public class Template extends FileEntityBase {
-    public boolean adminOnly;
+  public boolean adminOnly;
 }

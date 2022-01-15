@@ -10,11 +10,10 @@ import javax.ws.rs.Path;
 @Path("/me")
 public class UserService {
 
-    @Inject
-    Context context;
+  @Inject Context context;
 
-    @GET
-    public Employee get() {
-        return context.getCurrentEmployee();
-    }
+  @GET
+  public Employee get() {
+    return context.getCurrentEmployee();
+  }
 }

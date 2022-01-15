@@ -11,14 +11,13 @@ import javax.ws.rs.core.Response;
 
 @Path("/partner")
 public class PartnerService {
-    @Inject
-    RoleProtected roleProtected;
+  @Inject RoleProtected roleProtected;
 
-    @POST
-    @Path("/add")
-    @Transactional
-    public Response addPartner(Partner partner) {
-        roleProtected.asAdmin(() -> partner.persist());
-        return Response.ok().build();
-    }
+  @POST
+  @Path("/add")
+  @Transactional
+  public Response addPartner(Partner partner) {
+    roleProtected.asAdmin(() -> partner.persist());
+    return Response.ok().build();
+  }
 }

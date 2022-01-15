@@ -7,5 +7,5 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public class ProofOfIdentity extends FileEntityBase {
-    public ProofOfIdentityType type;
+  public ProofOfIdentityType type;
 }

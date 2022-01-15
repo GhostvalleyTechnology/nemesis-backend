@@ -14,57 +14,66 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 public class Reminder extends EntityBase {
-    @ManyToOne
-    public Employee employee;
-    @Column(nullable = false)
-    public ReminderType type;
-    public String name;
-    public String text;
-    public LocalDate due;
-    @ManyToOne
-    public Client client;
-    public boolean done;
-    public boolean sent;
+  @ManyToOne public Employee employee;
 
-    @Builder
-    public Reminder(Employee employee, ReminderType type, String name, String text, LocalDate due, Client client) {
-        this.employee = employee;
-        this.type = type;
-        this.name = name;
-        this.text = text;
-        this.due = due;
-        this.client = client;
-        this.done = false;
-        this.sent = false;
-    }
+  @Column(nullable = false)
+  public ReminderType type;
 
-    public static void createNewClientReminders(Client client) {
-        Reminder.builder()
-                .employee(client.supervisor)
-                .type(ReminderType.service)
-                .name("Polizzenservice")
-                .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
-                .due(LocalDate.now().plusWeeks(3))
-                .build().persist();
-        Reminder.builder()
-                .employee(client.supervisor)
-                .type(ReminderType.service)
-                .name("Jahresservice")
-                .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
-                .due(LocalDate.now().plusYears(1))
-                .build().persist();
-    }
+  public String name;
+  public String text;
+  public LocalDate due;
+  @ManyToOne public Client client;
+  public boolean done;
+  public boolean sent;
 
-    public static List<Reminder> getDueToday() {
-        return Reminder.list("select r from Reminder r where r.done = false and r.due = ?1", LocalDate.now());
-    }
+  @Builder
+  public Reminder(
+      Employee employee,
+      ReminderType type,
+      String name,
+      String text,
+      LocalDate due,
+      Client client) {
+    this.employee = employee;
+    this.type = type;
+    this.name = name;
+    this.text = text;
+    this.due = due;
+    this.client = client;
+    this.done = false;
+    this.sent = false;
+  }
 
-    @Transient
-    public void sent() {
-        Reminder.update("sent = true where id = ?1", id);
-    }
+  public static void createNewClientReminders(Client client) {
+    Reminder.builder()
+        .employee(client.supervisor)
+        .type(ReminderType.service)
+        .name("Polizzenservice")
+        .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
+        .due(LocalDate.now().plusWeeks(3))
+        .build()
+        .persist();
+    Reminder.builder()
+        .employee(client.supervisor)
+        .type(ReminderType.service)
+        .name("Jahresservice")
+        .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
+        .due(LocalDate.now().plusYears(1))
+        .build()
+        .persist();
+  }
 
-    public Mail getMail() {
-        return Mail.withText(employee.email, name, text);
-    }
+  public static List<Reminder> getDueToday() {
+    return Reminder.list(
+        "select r from Reminder r where r.done = false and r.due = ?1", LocalDate.now());
+  }
+
+  @Transient
+  public void sent() {
+    Reminder.update("sent = true where id = ?1", id);
+  }
+
+  public Mail getMail() {
+    return Mail.withText(employee.email, name, text);
+  }
 }

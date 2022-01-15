@@ -14,21 +14,16 @@ import static com.quellkunst.nemesis.security.ExceptionSupplier.unauthorizedExce
 
 @ApplicationScoped
 public class AppContext implements Context {
-    @Inject
-    @IdToken
-    Instance<JsonWebToken> idToken;
-    // JsonWebToken idToken;
+  @Inject @IdToken Instance<JsonWebToken> idToken;
 
-    @Override
-    public String getEmail() {
-        Optional<String> jwtEmail = idToken.get().claim(Claims.email);
-        return jwtEmail.orElseThrow(unauthorizedException("E-Mail Address is not configured!"));
-    }
+  @Override
+  public String getEmail() {
+    Optional<String> jwtEmail = idToken.get().claim(Claims.email);
+    return jwtEmail.orElseThrow(unauthorizedException("E-Mail Address is not configured!"));
+  }
 
-    @Override
-    public Employee getCurrentEmployee() {
-        return Employee.getByEmail(getEmail());
-    }
-
-
+  @Override
+  public Employee getCurrentEmployee() {
+    return Employee.getByEmail(getEmail());
+  }
 }

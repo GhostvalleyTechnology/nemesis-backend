@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public class PartnerContact extends EntityBase {
-    public String name;
-    public String email;
-    public String phone;
-    public String remarks;
+  public String name;
+  public String email;
+  public String phone;
+  public String remarks;
 }

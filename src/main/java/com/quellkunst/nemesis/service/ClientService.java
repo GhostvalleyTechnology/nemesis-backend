@@ -18,49 +18,48 @@ import java.util.List;
 @Path("/client")
 public class ClientService {
 
-    @Inject
-    Context context;
-    @Inject
-    RoleProtected roleProtected;
+  @Inject Context context;
+  @Inject RoleProtected roleProtected;
 
-    @GET
-    @NoCache
-    @Path("/list-all")
-    public List<Client> getAllClients() {
-        return roleProtected.asAdmin(() -> Client.listAll());
-    }
+  @GET
+  @NoCache
+  @Path("/list-all")
+  public List<Client> getAllClients() {
+    return roleProtected.asAdmin(() -> Client.listAll());
+  }
 
-    @POST
-    @Path("/add")
-    @Transactional
-    public Response add(Client client) {
-        client.supervisor = context.getCurrentEmployee();
-        client.persist();
-        Reminder.createNewClientReminders(client);
-        return Response.ok().build();
-    }
+  @POST
+  @Path("/add")
+  @Transactional
+  public Response add(Client client) {
+    client.supervisor = context.getCurrentEmployee();
+    client.persist();
+    Reminder.createNewClientReminders(client);
+    return Response.ok().build();
+  }
 
-    @POST
-    @Path("/update")
-    @Transactional
-    public Response update(Client client) {
-        client.persist();
-        return Response.ok().build();
-    }
+  @POST
+  @Path("/update")
+  @Transactional
+  public Response update(Client client) {
+    client.persist();
+    return Response.ok().build();
+  }
 
-    @DELETE
-    @Path("/delete")
-    @Transactional
-    public Response delete(Client client) {
-        client.deleted = true;
-        client.persist();
-        return Response.ok().build();
-    }
+  @DELETE
+  @Path("/delete")
+  @Transactional
+  public Response delete(Client client) {
+    client.deleted = true;
+    client.persist();
+    return Response.ok().build();
+  }
 
-    @GET
-    @NoCache
-    @Path("/list")
-    public List<Client> getClients() {
-        return Client.list("from Client where deleted = false and supervisor = ?1", context.getCurrentEmployee());
-    }
+  @GET
+  @NoCache
+  @Path("/list")
+  public List<Client> getClients() {
+    return Client.list(
+        "from Client where deleted = false and supervisor = ?1", context.getCurrentEmployee());
+  }
 }

@@ -12,12 +12,12 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 public class File extends EntityBase {
-    @Lob
-    @Basic(fetch = LAZY)
-    public byte[] data;
+  @Lob
+  @Basic(fetch = LAZY)
+  public byte[] data;
 
-    @Builder
-    public File(byte[] data) {
-        this.data = data;
-    }
+  @Builder
+  public File(byte[] data) {
+    this.data = data;
+  }
 }
