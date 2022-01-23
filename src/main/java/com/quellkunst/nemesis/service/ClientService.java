@@ -1,10 +1,11 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Client;
+import com.quellkunst.nemesis.model.Client_;
 import com.quellkunst.nemesis.model.Reminder;
 import com.quellkunst.nemesis.security.AppContext;
-import com.quellkunst.nemesis.security.RoleProtection;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import com.quellkunst.nemesis.security.Guard;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -17,16 +18,13 @@ import java.util.List;
 @Path("/client")
 public class ClientService {
 
-  @Inject
-  AppContext context;
-  @Inject
-  RoleProtection roleProtection;
+  @Inject AppContext context;
+  @Inject Guard guard;
 
   @GET
-  @NoCache
   @Path("/list-all")
-  public List<Client> getAllClients() {
-    return roleProtection.asAdmin(() -> Client.listAll());
+  public List<Client> listAll() {
+    return guard.asAdmin(() -> Client.listAll());
   }
 
   @POST
@@ -37,6 +35,12 @@ public class ClientService {
     client.persist();
     Reminder.createNewClientReminders(client);
     return Response.status(Response.Status.CREATED).build();
+  }
+
+  @GET
+  @Path("/get/{id}")
+  public Client get(@PathParam long id) {
+    return Client.byId(id);
   }
 
   @POST
@@ -57,10 +61,11 @@ public class ClientService {
   }
 
   @GET
-  @NoCache
   @Path("/list")
-  public List<Client> getClients() {
+  public List<Client> list() {
     return Client.list(
-        "from Client where deleted = false and supervisor = ?1", context.getCurrentEmployee());
+        String.format(
+            "from Client where %s = false and %s = ?1", Client_.DELETED, Client_.SUPERVISOR),
+        context.getCurrentEmployee());
   }
 }

@@ -27,7 +27,7 @@ public class Client extends Person {
   public List<GenericPerson> children;
 
   @OneToMany(orphanRemoval = true)
-  public List<Contract> contracts;
+  public List<ClientContract> clientContracts;
 
   @OneToMany(orphanRemoval = true)
   public List<ProofOfIdentity> proofOfIdentities;

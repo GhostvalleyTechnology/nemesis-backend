@@ -1,7 +1,7 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Partner;
-import com.quellkunst.nemesis.security.RoleProtection;
+import com.quellkunst.nemesis.security.Guard;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -11,19 +11,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path(PartnerService.PATH_PART)
 public class PartnerService {
   public static final String PATH_PART = "/partner";
-  @Inject
-  RoleProtection roleProtection;
+  @Inject Guard guard;
 
   @POST
   @Path("/add")
   @Transactional
   public Response add(Partner partner, @Context UriInfo uriInfo) {
-    roleProtection.asAdmin(() -> partner.persist());
+    guard.asAdmin(() -> partner.persist());
     return AppResponse.created(PATH_PART, uriInfo, partner);
   }
 
@@ -31,13 +32,24 @@ public class PartnerService {
   @Path("/update")
   @Transactional
   public Response update(Partner partner) {
-    roleProtection.asAdmin(partner::merge);
+    guard.asAdmin(partner::merge);
     return AppResponse.ok();
   }
 
   @GET
   @Path("/list")
   public List<Partner> list() {
-    return Partner.listAll();
+    List<Partner> partner = Partner.listAll();
+    var result = new ArrayList<Partner>();
+    partner.forEach(
+        p -> {
+          p.detach();
+          if (!guard.isAdmin()) {
+            p.logins =
+                p.logins.stream().filter(login -> !login.adminOnly).collect(Collectors.toList());
+          }
+          result.add(p);
+        });
+    return result;
   }
 }

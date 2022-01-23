@@ -6,7 +6,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class RoleProtectionImpl implements RoleProtection {
+public class GuardImpl implements Guard {
 
   private final UnauthorizedException INSUFFICIENT_RIGHTS =
       new UnauthorizedException("Insufficient Rights");
@@ -14,8 +14,13 @@ public class RoleProtectionImpl implements RoleProtection {
   @Inject AppContext context;
 
   @Override
+  public boolean isAdmin() {
+    return "admin@quellkunst.com".equals(context.getEmail()) || context.getCurrentEmployee().admin;
+  }
+
+  @Override
   public <T> T asAdmin(AdminCommand<T> action) {
-    if ("admin@quellkunst.com".equals(context.getEmail()) || context.getCurrentEmployee().admin) {
+    if (isAdmin()) {
       return action.run();
     }
     throw INSUFFICIENT_RIGHTS;

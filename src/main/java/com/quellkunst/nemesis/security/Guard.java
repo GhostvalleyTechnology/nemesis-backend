@@ -4,7 +4,7 @@ package com.quellkunst.nemesis.security;
  * Currently, as we do not support role authentication through auth0, this interface provides a
  * simple check if the current use has the needed authority.
  */
-public interface RoleProtection {
+public interface Guard {
 
   /**
    * Checks if the current user has admin rights. If so, the action is executed. If not, an
@@ -19,6 +19,14 @@ public interface RoleProtection {
   /**
    * Checks if the current user has admin rights. If so, the action is executed. If not, an
    * exception is thrown
+   *
+   * @param action to execute
    */
   void asAdmin(Runnable action);
+
+  /**
+   * Checks if the current user has admin rights.
+   * @return if the current user has admin rights.
+   */
+  boolean isAdmin();
 }

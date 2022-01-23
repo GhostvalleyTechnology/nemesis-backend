@@ -1,7 +1,7 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Reminder;
-import com.quellkunst.nemesis.security.RoleProtection;
+import com.quellkunst.nemesis.security.Guard;
 import io.quarkus.mailer.Mailer;
 
 import javax.inject.Inject;
@@ -13,14 +13,14 @@ import javax.ws.rs.core.Response;
 @Path("/admin")
 public class AdminService {
   @Inject
-  RoleProtection roleProtection;
+  Guard guard;
   @Inject Mailer mailer;
 
   @POST
   @Path("/daily")
   @Transactional
   public Response dailyTasks() {
-    roleProtection.asAdmin(() -> Reminder.getDueToday().forEach(this::sendReminderEmail));
+    guard.asAdmin(() -> Reminder.getDueToday().forEach(this::sendReminderEmail));
     return Response.ok().build();
   }
 

@@ -7,6 +7,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.enterprise.inject.spi.CDI;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
 @MappedSuperclass
 @NoArgsConstructor
@@ -16,8 +19,19 @@ public abstract class EntityBase extends PanacheEntityBase {
   @CreationTimestamp public LocalDateTime createdAt;
 
   @Transient
+  public static <T extends EntityBase> T byId(long id) {
+    Optional<T> maybe = findByIdOptional(id);
+    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
+  }
+
+  @Transient
   public void merge() {
     CDI.current().select(EntityManager.class).get().merge(this);
+  }
+
+  @Transient
+  public void detach() {
+    CDI.current().select(EntityManager.class).get().detach(this);
   }
 
   @Override

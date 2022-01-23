@@ -1,7 +1,8 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Employee;
-import com.quellkunst.nemesis.security.RoleProtection;
+import com.quellkunst.nemesis.security.Guard;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -15,29 +16,34 @@ import java.util.List;
 
 @Path(EmployeeService.PATH_PART)
 public class EmployeeService {
-    public static final String PATH_PART = "/employee";
-    @Inject
-    RoleProtection roleProtection;
+  public static final String PATH_PART = "/employee";
+  @Inject Guard guard;
 
-    @POST
-    @Path("/add")
-    @Transactional
-    public Response add(Employee emp, @Context UriInfo uriInfo) {
-        roleProtection.asAdmin(() -> emp.persist());
-        return AppResponse.created(PATH_PART, uriInfo, emp);
-    }
+  @POST
+  @Path("/add")
+  @Transactional
+  public Response add(Employee emp, @Context UriInfo uriInfo) {
+    guard.asAdmin(() -> emp.persist());
+    return AppResponse.created(PATH_PART, uriInfo, emp);
+  }
 
-    @POST
-    @Path("/update")
-    @Transactional
-    public Response update(Employee emp) {
-        roleProtection.asAdmin(emp::merge);
-        return AppResponse.ok();
-    }
+  @GET
+  @Path("/get/{id}")
+  public Employee get(@PathParam long id) {
+    return guard.asAdmin(() -> Employee.byId(id));
+  }
 
-    @GET
-    @Path("/list")
-    public List<Employee> list() {
-        return roleProtection.asAdmin(() -> Employee.listAll());
-    }
+  @POST
+  @Path("/update")
+  @Transactional
+  public Response update(Employee emp) {
+    guard.asAdmin(emp::merge);
+    return AppResponse.ok();
+  }
+
+  @GET
+  @Path("/list")
+  public List<Employee> list() {
+    return guard.asAdmin(() -> Employee.listAll());
+  }
 }
