@@ -30,7 +30,7 @@ public class EmployeeService {
   @GET
   @Path("/get/{id}")
   public Employee get(@PathParam long id) {
-    return guard.asAdmin(() -> Employee.byId(id));
+    return guard.asAdmin(() -> Employee.getById(id));
   }
 
   @POST

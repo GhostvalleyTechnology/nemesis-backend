@@ -19,12 +19,6 @@ public abstract class EntityBase extends PanacheEntityBase {
   @CreationTimestamp public LocalDateTime createdAt;
 
   @Transient
-  public static <T extends EntityBase> T byId(long id) {
-    Optional<T> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
-
-  @Transient
   public void merge() {
     CDI.current().select(EntityManager.class).get().merge(this);
   }

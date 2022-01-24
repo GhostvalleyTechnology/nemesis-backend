@@ -4,6 +4,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
+
+import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
 @Entity
 @NoArgsConstructor
@@ -19,6 +22,7 @@ public class Client extends Person {
   public Boolean pets;
   public String petsRemarks;
   public MaritalStatus maritalStatus;
+  public String homeRemarks;
 
   @OneToOne(orphanRemoval = true)
   public GenericPerson partner;
@@ -35,4 +39,9 @@ public class Client extends Person {
   public String bank;
   public String iban;
   public String bic;
+
+  public static Client byId(long id) {
+    Optional<Client> maybe = findByIdOptional(id);
+    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
+  }
 }

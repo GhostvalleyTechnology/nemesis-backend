@@ -7,6 +7,9 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 
+import java.util.Optional;
+
+import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -22,5 +25,10 @@ public class File extends EntityBase {
   public File(String name, byte[] data) {
     this.name = name;
     this.data = data;
+  }
+
+  public static File byId(long id) {
+    Optional<File> maybe = findByIdOptional(id);
+    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
   }
 }

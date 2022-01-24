@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import java.util.Optional;
 
 import static com.quellkunst.nemesis.security.ExceptionSupplier.forbiddenException;
+import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
 @Entity
 @NoArgsConstructor
@@ -24,6 +25,11 @@ public class Employee extends EntityBase {
     this.name = name;
     this.email = email;
     this.admin = admin;
+  }
+
+  public static Employee getById(long id) {
+    Optional<Employee> maybe = findByIdOptional(id);
+    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
   }
 
   public static Optional<Employee> findByEmail(String email) {

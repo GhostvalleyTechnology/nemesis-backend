@@ -12,11 +12,14 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-@Path("/client")
+@Path(ClientService.PATH_PART)
 public class ClientService {
+  public static final String PATH_PART = "/client";
 
   @Inject AppContext context;
   @Inject Guard guard;
@@ -30,11 +33,11 @@ public class ClientService {
   @POST
   @Path("/add")
   @Transactional
-  public Response add(Client client) {
+  public Response add(Client client, @Context UriInfo uriInfo) {
     client.supervisor = context.getCurrentEmployee();
     client.persist();
     Reminder.createNewClientReminders(client);
-    return Response.status(Response.Status.CREATED).build();
+    return AppResponse.created(PATH_PART, uriInfo, client);
   }
 
   @GET
@@ -48,7 +51,7 @@ public class ClientService {
   @Transactional
   public Response update(Client client) {
     client.merge();
-    return Response.ok().build();
+    return AppResponse.ok();
   }
 
   @POST
@@ -57,7 +60,7 @@ public class ClientService {
   public Response delete(Client client) {
     client.deleted = true;
     client.merge();
-    return Response.ok().build();
+    return AppResponse.ok();
   }
 
   @GET
