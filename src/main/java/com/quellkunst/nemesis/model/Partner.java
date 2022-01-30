@@ -16,7 +16,9 @@ import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundExceptio
 @NoArgsConstructor
 @Entity
 public class Partner extends EntityBase {
+  @Column(unique = true)
   public String name;
+
   public String website;
   public String bank;
   public String iban;
