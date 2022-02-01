@@ -9,9 +9,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 @Path("/me")
@@ -56,7 +53,7 @@ public class UserService {
             .smoker(false)
             .pets(true)
             .petsRemarks("Two cats")
-            .maritalStatus(MaritalStatus.single)
+            .maritalStatus(MaritalStatus.married)
             .homeRemarks("Rent 55qm")
             .partner(spouse)
             .build();

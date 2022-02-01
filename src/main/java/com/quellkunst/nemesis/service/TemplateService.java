@@ -40,7 +40,11 @@ public class TemplateService {
   @GET
   @Path("/list")
   public List<Template> list() {
-    return Template.listAll();
+    if (guard.isAdmin()) {
+      return Template.listAll();
+    } else {
+      return Template.list("from Template where adminOnly = 'false'");
+    }
   }
 
   @GET

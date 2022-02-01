@@ -8,6 +8,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.Base64;
 
 public class AppResponse {
   private AppResponse() {}
@@ -25,6 +26,7 @@ public class AppResponse {
 
   public static Response fileDownload(FileEntityBase entityBase) {
     File file = File.byId(entityBase.fileId);
-    return Response.ok(file.data, MediaType.APPLICATION_OCTET_STREAM).build();
+    var base64Encoded = Base64.getEncoder().encodeToString(file.data);
+    return Response.ok(base64Encoded, MediaType.APPLICATION_OCTET_STREAM).build();
   }
 }
