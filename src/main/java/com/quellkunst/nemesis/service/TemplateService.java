@@ -2,6 +2,7 @@ package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Template;
 import com.quellkunst.nemesis.security.Guard;
+import com.quellkunst.nemesis.service.dto.FileDto;
 import com.quellkunst.nemesis.service.dto.TemplateDto;
 import com.quellkunst.nemesis.service.dto.TemplateUploadDto;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Path("/template")
 public class TemplateService {
   @Inject Guard guard;
@@ -23,7 +25,6 @@ public class TemplateService {
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.TEXT_PLAIN)
-  @Transactional
   @Path("/add")
   public Response add(@MultipartForm TemplateUploadDto input) {
     guard.asAdmin(() -> addTemplate(input));
@@ -54,9 +55,7 @@ public class TemplateService {
 
   @GET
   @Path("/get/{templateId}")
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Transactional
-  public Response get(@PathParam long templateId) {
+  public FileDto get(@PathParam long templateId) {
     Template template = Template.byId(templateId);
     if (template.adminOnly) {
       return guard.asAdmin(() -> AppResponse.fileDownload(template));
@@ -66,7 +65,6 @@ public class TemplateService {
 
   @DELETE
   @Path("/delete/{templateId}")
-  @Transactional
   public Response delete(@PathParam long templateId) {
     guard.asAdmin(() -> Template.byId(templateId).delete());
     return AppResponse.ok();

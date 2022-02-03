@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Path(PartnerServiceTypeService.PATH_PART)
 public class PartnerServiceTypeService {
   public static final String PATH_PART = "/partner-service-type";
@@ -25,7 +26,6 @@ public class PartnerServiceTypeService {
 
   @POST
   @Path("/add")
-  @Transactional
   public Response add(PartnerServiceTypeDto service, @Context UriInfo uriInfo) {
     guard.asAdmin(service::newEntity);
     return AppResponse.created(PATH_PART, uriInfo, service);
@@ -40,7 +40,6 @@ public class PartnerServiceTypeService {
 
   @DELETE
   @Path("/delete/{id}")
-  @Transactional
   public Response delete(@PathParam long id) {
     return AppResponse.deleted(guard.asAdmin(() -> PartnerServiceType.deleteById(id)));
   }

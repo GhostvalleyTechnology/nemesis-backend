@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Path(ClientService.PATH_PART)
 public class ClientService {
   public static final String PATH_PART = "/client";
@@ -40,7 +41,6 @@ public class ClientService {
 
   @POST
   @Path("/add")
-  @Transactional
   public Response add(ClientDto dto, @Context UriInfo uriInfo) {
     Client client = dto.getEntity();
     client.supervisor = context.getCurrentEmployee();
@@ -57,7 +57,6 @@ public class ClientService {
 
   @POST
   @Path("/update")
-  @Transactional
   public Response update(ClientDto client) {
     client.updateEntity();
     return AppResponse.ok();
@@ -65,7 +64,6 @@ public class ClientService {
 
   @DELETE
   @Path("/delete/{clientId}")
-  @Transactional
   public Response delete(@PathParam long clientId) {
     guard.asAdmin(
         () -> {

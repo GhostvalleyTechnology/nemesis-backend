@@ -20,6 +20,10 @@ public abstract class AbstractFileBasedDto {
   @PartType(MediaType.TEXT_PLAIN)
   public String fileName;
 
+  @FormParam("fileExtension")
+  @PartType(MediaType.TEXT_PLAIN)
+  public String fileExtension;
+
   public byte[] readFile() {
     try {
       return file.readAllBytes();
@@ -29,7 +33,7 @@ public abstract class AbstractFileBasedDto {
   }
 
   public long persist() {
-    var file = File.builder().name(fileName).data(readFile()).build();
+    var file = File.builder().name(fileName).extension(fileExtension).data(readFile()).build();
     file.persist();
     return file.id;
   }

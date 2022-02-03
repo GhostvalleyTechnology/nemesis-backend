@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
-
 import java.util.Optional;
 
 import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
@@ -16,14 +15,16 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class File extends EntityBase {
   public String name;
+  public String extension;
 
   @Lob
   @Basic(fetch = LAZY)
   public byte[] data;
 
   @Builder
-  public File(String name, byte[] data) {
+  public File(String name, String extension, byte[] data) {
     this.name = name;
+    this.extension = extension;
     this.data = data;
   }
 

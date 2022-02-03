@@ -80,6 +80,17 @@ public class ClientDto extends AbstractPersonDto<Client> {
     entity.petsRemarks = petsRemarks;
     entity.maritalStatus = maritalStatus;
     entity.homeRemarks = homeRemarks;
+    entity.bank = bank;
+    entity.iban = iban;
+    entity.bic = bic;
+
+    entity.partner = partner.createOrUpdateEntity();
+    entity.children =
+        children.stream().map(GenericPersonDto::createOrUpdateEntity).collect(Collectors.toList());
+    entity.clientContracts =
+        contracts.stream().map(ClientContractDto::getEntity).collect(Collectors.toList());
+    entity.proofOfIdentities =
+        proofOfIdentities.stream().map(ProofOfIdentityDto::getEntity).collect(Collectors.toList());
     return entity;
   }
 }

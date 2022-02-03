@@ -1,7 +1,6 @@
 package com.quellkunst.nemesis.service.dto;
 
 import com.quellkunst.nemesis.model.Partner;
-import com.quellkunst.nemesis.model.PartnerServiceType;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +44,15 @@ public class PartnerDto extends AbstractEntityDto<Partner> {
 
   @Override
   public Partner prepareNewEntity() {
-    var entity = new Partner();
+    return mapValues(new Partner());
+  }
+
+  @Override
+  public Partner prepareUpdateEntity() {
+    return mapValues(Partner.byId(id));
+  }
+
+  private Partner mapValues(Partner entity) {
     entity.name = name;
     entity.website = website;
     entity.bank = bank;
@@ -53,22 +60,12 @@ public class PartnerDto extends AbstractEntityDto<Partner> {
     entity.bic = bic;
     entity.services =
         services.stream()
-            .map(dto -> PartnerServiceType.byId(dto.id))
+            .map(PartnerServiceTypeDto::getEntity)
             .collect(Collectors.toCollection(TreeSet::new));
-    entity.logins = logins.stream().map(PartnerLoginDto::newEntity).collect(Collectors.toList());
+    entity.logins =
+        logins.stream().map(PartnerLoginDto::createOrUpdateEntity).collect(Collectors.toList());
     entity.contacts =
-        contacts.stream().map(PartnerContactDto::newEntity).collect(Collectors.toList());
-    return entity;
-  }
-
-  @Override
-  public Partner prepareUpdateEntity() {
-    var entity = Partner.byId(id);
-    entity.name = name;
-    entity.website = website;
-    entity.bank = bank;
-    entity.iban = iban;
-    entity.bic = bic;
+        contacts.stream().map(PartnerContactDto::createOrUpdateEntity).collect(Collectors.toList());
     return entity;
   }
 

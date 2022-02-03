@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Path(EmployeeService.PATH_PART)
 public class EmployeeService {
   public static final String PATH_PART = "/employee";
@@ -24,7 +25,6 @@ public class EmployeeService {
 
   @POST
   @Path("/add")
-  @Transactional
   public Response add(EmployeeDto emp, @Context UriInfo uriInfo) {
     guard.asAdmin(emp::newEntity);
     return AppResponse.created(PATH_PART, uriInfo, emp);
@@ -38,7 +38,6 @@ public class EmployeeService {
 
   @POST
   @Path("/update")
-  @Transactional
   public Response update(EmployeeDto emp) {
     guard.asAdmin(emp::updateEntity);
     return AppResponse.ok();

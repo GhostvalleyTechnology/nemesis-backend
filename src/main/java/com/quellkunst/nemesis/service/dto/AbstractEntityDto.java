@@ -31,6 +31,14 @@ public abstract class AbstractEntityDto<T extends EntityBase> implements Identif
   @JsonIgnore
   public abstract T getEntity();
 
+  @JsonIgnore
+  protected T createOrUpdateEntity() {
+    if (id > 0) {
+      return updateEntity();
+    }
+    return newEntity();
+  }
+
   public T newEntity() {
     var entity = prepareNewEntity();
     entity.persist();

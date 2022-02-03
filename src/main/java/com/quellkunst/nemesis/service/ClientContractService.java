@@ -4,6 +4,7 @@ import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.ClientContract;
 import com.quellkunst.nemesis.model.Partner;
 import com.quellkunst.nemesis.service.dto.ClientContractUploadDto;
+import com.quellkunst.nemesis.service.dto.FileDto;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
@@ -13,11 +14,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/client-contract")
+@Transactional
 public class ClientContractService {
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.TEXT_PLAIN)
-  @Transactional
   @Path("/add")
   public Response add(@MultipartForm ClientContractUploadDto input) {
     var fileId = input.persist();
@@ -40,9 +41,7 @@ public class ClientContractService {
 
   @GET
   @Path("/get/{contractId}")
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  @Transactional
-  public Response get(@PathParam long contractId) {
+  public FileDto get(@PathParam long contractId) {
     ClientContract contract = ClientContract.byId(contractId);
     return AppResponse.fileDownload(contract);
   }

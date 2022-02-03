@@ -42,14 +42,58 @@ public class Client extends Person {
   public String iban;
   public String bic;
 
-  public static Client byId(long id) {
-    Optional<Client> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
-
   @Builder
-  public Client(Gender gender, String firstName, String lastName, String email, String phone, String mobile, String title, String academicDegree, LocalDate birthday, String birthPlace, Country nationality, String socialInsuranceInstitution, String occupation, Country country, String zipCode, String city, String address, Employee supervisor, boolean deleted, Boolean militaryServiceDone, Boolean smoker, Boolean pets, String petsRemarks, MaritalStatus maritalStatus, String homeRemarks, GenericPerson partner, List<GenericPerson> children, List<ClientContract> clientContracts, List<ProofOfIdentity> proofOfIdentities, String bank, String iban, String bic) {
-    super(gender, firstName, lastName, email, phone, mobile, title, academicDegree, birthday, birthPlace, nationality, socialInsuranceInstitution, occupation, country, zipCode, city, address);
+  public Client(
+      Gender gender,
+      String firstName,
+      String lastName,
+      String email,
+      String phone,
+      String mobile,
+      String title,
+      String academicDegree,
+      LocalDate birthday,
+      String birthPlace,
+      Country nationality,
+      String socialInsuranceInstitution,
+      String occupation,
+      Country country,
+      String zipCode,
+      String city,
+      String address,
+      Employee supervisor,
+      boolean deleted,
+      Boolean militaryServiceDone,
+      Boolean smoker,
+      Boolean pets,
+      String petsRemarks,
+      MaritalStatus maritalStatus,
+      String homeRemarks,
+      GenericPerson partner,
+      List<GenericPerson> children,
+      List<ClientContract> clientContracts,
+      List<ProofOfIdentity> proofOfIdentities,
+      String bank,
+      String iban,
+      String bic) {
+    super(
+        gender,
+        firstName,
+        lastName,
+        email,
+        phone,
+        mobile,
+        title,
+        academicDegree,
+        birthday,
+        birthPlace,
+        nationality,
+        socialInsuranceInstitution,
+        occupation,
+        country,
+        zipCode,
+        city,
+        address);
     this.supervisor = supervisor;
     this.deleted = deleted;
     this.militaryServiceDone = militaryServiceDone;
@@ -65,5 +109,10 @@ public class Client extends Person {
     this.bank = bank;
     this.iban = iban;
     this.bic = bic;
+  }
+
+  public static Client byId(long id) {
+    Optional<Client> maybe = findByIdOptional(id);
+    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
   }
 }

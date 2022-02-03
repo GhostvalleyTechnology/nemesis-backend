@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Path(PartnerService.PATH_PART)
 public class PartnerService {
   public static final String PATH_PART = "/partner";
@@ -24,7 +25,6 @@ public class PartnerService {
 
   @POST
   @Path("/add")
-  @Transactional
   public Response add(PartnerDto partner, @Context UriInfo uriInfo) {
     guard.asAdmin(partner::newEntity);
     return AppResponse.created(PATH_PART, uriInfo, partner);
@@ -32,7 +32,6 @@ public class PartnerService {
 
   @POST
   @Path("/update")
-  @Transactional
   public Response update(PartnerDto partner) {
     guard.asAdmin(partner::updateEntity);
     return AppResponse.ok();
@@ -40,7 +39,6 @@ public class PartnerService {
 
   @GET
   @Path("/list")
-  @Transactional
   public List<PartnerDto> list() {
     Stream<Partner> partnerStream = Partner.streamAll();
     return partnerStream.map(PartnerDto::of).map(this::filterLogins).collect(Collectors.toList());
@@ -55,7 +53,9 @@ public class PartnerService {
   private PartnerDto filterLogins(PartnerDto partner) {
     if (!guard.isAdmin()) {
       partner.setLogins(
-          partner.getLogins().stream().filter(login -> !login.isAdminOnly()).collect(Collectors.toList()));
+          partner.getLogins().stream()
+              .filter(login -> !login.isAdminOnly())
+              .collect(Collectors.toList()));
     }
     return partner;
   }

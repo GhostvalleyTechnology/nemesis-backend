@@ -1,5 +1,6 @@
 package com.quellkunst.nemesis.service.dto;
 
+import com.quellkunst.nemesis.model.ProofOfIdentityType;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
@@ -7,8 +8,12 @@ import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 
 @RegisterForReflection
-public class TemplateUploadDto extends AbstractFileBasedDto {
-  @FormParam("adminOnly")
+public class ProofOfIdentityUploadDto extends AbstractFileBasedDto {
+  @FormParam("clientId")
   @PartType(MediaType.TEXT_PLAIN)
-  public boolean adminOnly;
+  public long clientId;
+
+  @FormParam("type")
+  @PartType(MediaType.TEXT_PLAIN)
+  public ProofOfIdentityType type;
 }

@@ -13,6 +13,7 @@ import lombok.Setter;
 @RegisterForReflection
 public class ProofOfIdentityDto extends AbstractEntityDto<ProofOfIdentity> {
   ProofOfIdentityType type;
+  String fileName;
 
   protected ProofOfIdentityDto(ProofOfIdentity entity) {
     super(entity);
@@ -21,6 +22,7 @@ public class ProofOfIdentityDto extends AbstractEntityDto<ProofOfIdentity> {
   public static ProofOfIdentityDto of(ProofOfIdentity entity) {
     var dto = new ProofOfIdentityDto(entity);
     dto.type = entity.type;
+    dto.fileName = entity.fileName;
     return dto;
   }
 
@@ -28,6 +30,7 @@ public class ProofOfIdentityDto extends AbstractEntityDto<ProofOfIdentity> {
   protected ProofOfIdentity prepareNewEntity() {
     var entity = new ProofOfIdentity();
     entity.type = type;
+    entity.fileName = fileName;
     return entity;
   }
 
@@ -35,6 +38,7 @@ public class ProofOfIdentityDto extends AbstractEntityDto<ProofOfIdentity> {
   protected ProofOfIdentity prepareUpdateEntity() {
     var entity = ProofOfIdentity.byId(id);
     entity.type = type;
+    entity.fileName = fileName;
     return entity;
   }
 

@@ -12,13 +12,13 @@ import javax.ws.rs.Path;
 import java.time.LocalDate;
 import java.util.TreeSet;
 
+@Transactional
 @Path("/me")
 public class UserService {
 
   @Inject AppContext context;
 
   @GET
-  @Transactional
   public EmployeeDto get() {
     if (LaunchMode.current().isDevOrTest()) {
       setup();

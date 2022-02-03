@@ -11,14 +11,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 @Path("/admin")
+@Transactional
 public class AdminService {
-  @Inject
-  Guard guard;
+  @Inject Guard guard;
   @Inject Mailer mailer;
 
   @POST
   @Path("/daily")
-  @Transactional
   public Response dailyTasks() {
     guard.asAdmin(() -> Reminder.getDueToday().forEach(this::sendReminderEmail));
     return Response.ok().build();
