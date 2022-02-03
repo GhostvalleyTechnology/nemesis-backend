@@ -3,7 +3,7 @@ package com.quellkunst.nemesis.service;
 import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.ClientContract;
 import com.quellkunst.nemesis.model.Partner;
-import com.quellkunst.nemesis.service.dto.ClientContractDto;
+import com.quellkunst.nemesis.service.dto.ClientContractUploadDto;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
@@ -19,8 +19,8 @@ public class ClientContractService {
   @Produces(MediaType.TEXT_PLAIN)
   @Transactional
   @Path("/add")
-  public Response add(@MultipartForm ClientContractDto input) {
-    var fileId = FileUpload.persist(input);
+  public Response add(@MultipartForm ClientContractUploadDto input) {
+    var fileId = input.persist();
     Client client = Client.byId(input.clientId);
 
     var contract =

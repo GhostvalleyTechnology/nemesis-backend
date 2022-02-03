@@ -5,6 +5,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import java.time.LocalDate;
+import java.util.Optional;
+
+import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
 @Entity
 @NoArgsConstructor
@@ -47,5 +50,10 @@ public class GenericPerson extends Person {
         zipCode,
         city,
         address);
+  }
+
+  public static GenericPerson byId(long id) {
+    Optional<GenericPerson> maybe = findByIdOptional(id);
+    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
   }
 }

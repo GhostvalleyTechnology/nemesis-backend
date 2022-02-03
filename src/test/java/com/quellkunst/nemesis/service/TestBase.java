@@ -2,9 +2,9 @@ package com.quellkunst.nemesis.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quellkunst.nemesis.model.Employee;
 import com.quellkunst.nemesis.model.EntityBase;
 import com.quellkunst.nemesis.security.AppContext;
+import com.quellkunst.nemesis.service.dto.EmployeeDto;
 import io.quarkus.test.junit.mockito.InjectMock;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
@@ -20,8 +20,7 @@ import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.when;
 
 public abstract class TestBase {
-  @InjectMock
-  AppContext context;
+  @InjectMock AppContext context;
   @Inject SessionFactory sessionFactory;
 
   public static RequestSpecification givenJson(Object object) {
@@ -34,19 +33,19 @@ public abstract class TestBase {
     }
   }
 
-  public static Employee admin() {
-    var emp = new Employee();
-    emp.admin = true;
-    emp.email = "admin@quellkunst.com";
-    emp.name = "Admin";
+  public static EmployeeDto admin() {
+    var emp = new EmployeeDto();
+    emp.setAdmin(true);
+    emp.setEmail("admin@quellkunst.com");
+    emp.setName("Admin");
     return emp;
   }
 
-  public static Employee testUser() {
-    var emp = new Employee();
-    emp.admin = false;
-    emp.email = "test@quellkunst.com";
-    emp.name = "Test User";
+  public static EmployeeDto testUser() {
+    var emp = new EmployeeDto();
+    emp.setAdmin(false);
+    emp.setEmail("test@quellkunst.com");
+    emp.setName("Test User");
     return emp;
   }
 

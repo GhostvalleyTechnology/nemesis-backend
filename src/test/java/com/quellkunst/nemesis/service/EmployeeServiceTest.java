@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
 public class EmployeeServiceTest extends TestBase {
@@ -67,7 +67,7 @@ public class EmployeeServiceTest extends TestBase {
         .statusCode(Response.Status.CREATED.getStatusCode());
     var resultBody = given().get("/api/employee/list").then().extract().body().asString();
     var newJsonRequest =
-        resultBody.substring(1, resultBody.length() - 1).replace(testUser().name, "New Name!");
+        resultBody.substring(1, resultBody.length() - 1).replace(testUser().getName(), "New Name!");
     given()
         .contentType(ContentType.JSON)
         .body(newJsonRequest)

@@ -27,7 +27,7 @@ public class Employee extends EntityBase {
     this.admin = admin;
   }
 
-  public static Employee getById(long id) {
+  public static Employee byId(long id) {
     Optional<Employee> maybe = findByIdOptional(id);
     return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
   }

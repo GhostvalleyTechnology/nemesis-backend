@@ -2,6 +2,7 @@ package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.*;
 import com.quellkunst.nemesis.security.AppContext;
+import com.quellkunst.nemesis.service.dto.EmployeeDto;
 import io.quarkus.runtime.LaunchMode;
 
 import javax.inject.Inject;
@@ -18,11 +19,11 @@ public class UserService {
 
   @GET
   @Transactional
-  public Employee get() {
+  public EmployeeDto get() {
     if (LaunchMode.current().isDevOrTest()) {
       setup();
     }
-    return context.getCurrentEmployee();
+    return EmployeeDto.of(context.getCurrentEmployee());
   }
 
   private void setup() {

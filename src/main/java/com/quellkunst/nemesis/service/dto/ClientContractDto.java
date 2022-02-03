@@ -1,33 +1,63 @@
 package com.quellkunst.nemesis.service.dto;
 
+import com.quellkunst.nemesis.model.ClientContract;
+import com.quellkunst.nemesis.model.Partner;
+import com.quellkunst.nemesis.model.PartnerServiceType;
 import com.quellkunst.nemesis.model.PaymentFrequency;
-import org.jboss.resteasy.annotations.providers.multipart.PartType;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.ws.rs.FormParam;
-import javax.ws.rs.core.MediaType;
+@Getter
+@Setter
+@NoArgsConstructor
+@RegisterForReflection
+public class ClientContractDto extends AbstractEntityDto<ClientContract> {
+  boolean legacy;
+  String contractNumber;
+  long paymentValue;
+  PaymentFrequency paymentFrequency;
+  PartnerReferenceDto contractor;
+  PartnerServiceTypeDto serviceType;
 
-public class ClientContractDto extends AbstractFileBasedDto {
-  @FormParam("clientId")
-  @PartType(MediaType.TEXT_PLAIN)
-  public long clientId;
+  protected ClientContractDto(ClientContract entity) {
+    super(entity);
+  }
 
-  @FormParam("legacy")
-  @PartType(MediaType.TEXT_PLAIN)
-  public boolean legacy;
+  public static ClientContractDto of(ClientContract entity) {
+    var dto = new ClientContractDto(entity);
+    dto.legacy = entity.legacy;
+    dto.contractNumber = entity.contractNumber;
+    dto.paymentValue = entity.paymentValue;
+    dto.paymentFrequency = entity.paymentFrequency;
+    dto.contractor = PartnerReferenceDto.of(entity.contractor);
+    dto.serviceType = PartnerServiceTypeDto.of(entity.serviceType);
+    return dto;
+  }
 
-  @FormParam("contractNumber")
-  @PartType(MediaType.TEXT_PLAIN)
-  public String contractNumber;
+  @Override
+  protected ClientContract prepareNewEntity() {
+    return mapValues(new ClientContract());
+  }
 
-  @FormParam("paymentValue")
-  @PartType(MediaType.TEXT_PLAIN)
-  public long paymentValue;
+  private ClientContract mapValues(ClientContract entity) {
+    entity.legacy = legacy;
+    entity.contractNumber = contractNumber;
+    entity.paymentValue = paymentValue;
+    entity.paymentFrequency = paymentFrequency;
+    entity.contractor = Partner.byId(contractor.id);
+    entity.serviceType = PartnerServiceType.byId(serviceType.id);
+    return entity;
+  }
 
-  @FormParam("paymentFrequency")
-  @PartType(MediaType.TEXT_PLAIN)
-  public PaymentFrequency paymentFrequency;
+  @Override
+  protected ClientContract prepareUpdateEntity() {
+    return mapValues(ClientContract.byId(id));
+  }
 
-  @FormParam("contractorId")
-  @PartType(MediaType.TEXT_PLAIN)
-  public long contractorId;
+  @Override
+  public ClientContract getEntity() {
+    return ClientContract.byId(id);
+  }
 }

@@ -1,6 +1,6 @@
 package com.quellkunst.nemesis.service;
 
-import com.quellkunst.nemesis.model.EntityBase;
+import com.quellkunst.nemesis.Identifiable;
 import com.quellkunst.nemesis.model.File;
 import com.quellkunst.nemesis.model.FileEntityBase;
 
@@ -17,10 +17,15 @@ public class AppResponse {
     return Response.ok().build();
   }
 
-  public static Response created(String pathPart, UriInfo uriInfo, EntityBase entity) {
+  public static Response deleted(boolean deleted) {
+    return Response.status(deleted ? Response.Status.OK : Response.Status.NOT_FOUND).build();
+  }
+
+  public static Response created(String pathPart, UriInfo uriInfo, Identifiable identifiable) {
     var baseUri = uriInfo.getBaseUri().toString();
     // substring 5: length -1 - "/api"
-    var location = baseUri.substring(0, baseUri.length() - 5) + pathPart + "/" + entity.id;
+    var location =
+        baseUri.substring(0, baseUri.length() - 5) + pathPart + "/" + identifiable.getId();
     return Response.created(URI.create(location)).build();
   }
 

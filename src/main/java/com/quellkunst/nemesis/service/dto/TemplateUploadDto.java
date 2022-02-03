@@ -1,6 +1,5 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.File;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
@@ -8,17 +7,12 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.io.InputStream;
 
 @RegisterForReflection
-public abstract class AbstractFileBasedDto {
-  @FormParam("file")
-  @PartType(MediaType.APPLICATION_OCTET_STREAM)
-  public InputStream file;
-
-  @FormParam("fileName")
+public class TemplateUploadDto extends AbstractFileBasedDto {
+  @FormParam("adminOnly")
   @PartType(MediaType.TEXT_PLAIN)
-  public String fileName;
+  public boolean adminOnly;
 
   public byte[] readFile() {
     try {
@@ -26,11 +20,5 @@ public abstract class AbstractFileBasedDto {
     } catch (IOException e) {
       throw new BadRequestException(e);
     }
-  }
-
-  public long persist() {
-    var file = File.builder().name(fileName).data(readFile()).build();
-    file.persist();
-    return file.id;
   }
 }

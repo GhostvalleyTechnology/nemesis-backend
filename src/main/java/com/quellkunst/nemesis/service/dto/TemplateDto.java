@@ -1,22 +1,48 @@
 package com.quellkunst.nemesis.service.dto;
 
-import org.jboss.resteasy.annotations.providers.multipart.PartType;
+import com.quellkunst.nemesis.model.Template;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.core.MediaType;
-import java.io.IOException;
+@Getter
+@Setter
+@NoArgsConstructor
+@RegisterForReflection
+public class TemplateDto extends AbstractEntityDto<Template> {
+  boolean adminOnly;
+  String fileName;
 
-public class TemplateDto extends AbstractFileBasedDto {
-  @FormParam("adminOnly")
-  @PartType(MediaType.TEXT_PLAIN)
-  public boolean adminOnly;
+  protected TemplateDto(Template entity) {
+    super(entity);
+  }
 
-  public byte[] readFile() {
-    try {
-      return file.readAllBytes();
-    } catch (IOException e) {
-      throw new BadRequestException(e);
-    }
+  public static TemplateDto of(Template entity) {
+    var dto = new TemplateDto(entity);
+    dto.adminOnly = entity.adminOnly;
+    dto.fileName = entity.fileName;
+    return dto;
+  }
+
+  @Override
+  protected Template prepareNewEntity() {
+    var entity = new Template();
+    entity.adminOnly = adminOnly;
+    entity.fileName = fileName;
+    return entity;
+  }
+
+  @Override
+  protected Template prepareUpdateEntity() {
+    var entity = Template.byId(id);
+    entity.adminOnly = adminOnly;
+    entity.fileName = fileName;
+    return entity;
+  }
+
+  @Override
+  public Template getEntity() {
+    return Template.byId(id);
   }
 }
