@@ -1,5 +1,5 @@
 package com.quellkunst.nemesis.security;
 
-public interface AdminCommand<T> {
+public interface ReturnableRunnable<T> {
   T run();
 }

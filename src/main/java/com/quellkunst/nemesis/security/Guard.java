@@ -14,7 +14,7 @@ public interface Guard {
    * @param <T> the incoming command defines the output type
    * @return the type-safe action result
    */
-  <T> T asAdmin(AdminCommand<T> action);
+  <T> T asAdmin(ReturnableRunnable<T> action);
 
   /**
    * Checks if the current user has admin rights. If so, the action is executed. If not, an
@@ -26,7 +26,12 @@ public interface Guard {
 
   /**
    * Checks if the current user has admin rights.
+   *
    * @return if the current user has admin rights.
    */
   boolean isAdmin();
+
+  void asEmployee(EmployeeCheck check, Runnable action);
+
+  <T> T asEmployee(EmployeeCheck check, ReturnableRunnable<T> action);
 }

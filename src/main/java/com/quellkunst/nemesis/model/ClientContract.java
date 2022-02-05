@@ -12,6 +12,7 @@ import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundExceptio
 @NoArgsConstructor
 @Entity
 public class ClientContract extends FileEntityBase {
+  @ManyToOne public Client client;
   public boolean legacy;
   public String contractNumber;
   public long paymentValue;

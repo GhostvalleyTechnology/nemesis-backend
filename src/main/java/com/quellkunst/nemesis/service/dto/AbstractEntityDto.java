@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quellkunst.nemesis.Identifiable;
 import com.quellkunst.nemesis.model.EntityBase;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @RegisterForReflection
 public abstract class AbstractEntityDto<T extends EntityBase> implements Identifiable {
   long id;
-  LocalDateTime createdAt;
+  @Getter LocalDateTime createdAt;
 
   protected AbstractEntityDto(T entity) {
     this.id = entity.id;

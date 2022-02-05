@@ -3,6 +3,7 @@ package com.quellkunst.nemesis.service;
 import com.quellkunst.nemesis.model.Partner;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.PartnerDto;
+import com.quellkunst.nemesis.service.dto.PartnerReferenceDto;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
@@ -39,9 +40,9 @@ public class PartnerService {
 
   @GET
   @Path("/list")
-  public List<PartnerDto> list() {
+  public List<PartnerReferenceDto> list() {
     Stream<Partner> partnerStream = Partner.streamAll();
-    return partnerStream.map(PartnerDto::of).map(this::filterLogins).collect(Collectors.toList());
+    return partnerStream.map(PartnerReferenceDto::of).collect(Collectors.toList());
   }
 
   @GET

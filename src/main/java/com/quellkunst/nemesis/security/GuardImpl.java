@@ -19,7 +19,7 @@ public class GuardImpl implements Guard {
   }
 
   @Override
-  public <T> T asAdmin(AdminCommand<T> action) {
+  public <T> T asAdmin(ReturnableRunnable<T> action) {
     if (isAdmin()) {
       return action.run();
     }
@@ -33,5 +33,23 @@ public class GuardImpl implements Guard {
           action.run();
           return null;
         });
+  }
+
+  @Override
+  public void asEmployee(EmployeeCheck check, Runnable action) {
+    asEmployee(
+        check,
+        () -> {
+          action.run();
+          return null;
+        });
+  }
+
+  @Override
+  public <T> T asEmployee(EmployeeCheck check, ReturnableRunnable<T> action) {
+    if (isAdmin() || context.getCurrentEmployee().equals(check.responsibleEmployee())) {
+      return action.run();
+    }
+    throw INSUFFICIENT_RIGHTS;
   }
 }

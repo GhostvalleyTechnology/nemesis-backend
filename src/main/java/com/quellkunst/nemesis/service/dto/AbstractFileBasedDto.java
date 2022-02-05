@@ -5,6 +5,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -23,6 +24,10 @@ public abstract class AbstractFileBasedDto {
   @FormParam("fileExtension")
   @PartType(MediaType.TEXT_PLAIN)
   public String fileExtension;
+
+  public boolean hasFile() {
+    return file != null;
+  }
 
   public byte[] readFile() {
     try {

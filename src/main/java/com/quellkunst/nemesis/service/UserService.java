@@ -30,7 +30,14 @@ public class UserService {
     if (Employee.findByEmail("admin@quellkunst.com").isPresent()) {
       return;
     }
-    var emp = Employee.builder().email("admin@quellkunst.com").name("Admin").admin(true).build();
+
+    Employee.builder()
+        .email("admin@quellkunst.com")
+        .name("Admin")
+        .admin(true)
+        .build()
+        .persistAndFlush();
+    var emp = Employee.builder().email("test@quellkunst.com").name("Test").admin(false).build();
     emp.persistAndFlush();
 
     var spouse =

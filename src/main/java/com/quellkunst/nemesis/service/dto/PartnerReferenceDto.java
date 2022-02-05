@@ -6,12 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @RegisterForReflection
 public class PartnerReferenceDto extends AbstractEntityDto<Partner> {
   String name;
+  List<PartnerServiceTypeDto> services;
 
   protected PartnerReferenceDto(Partner entity) {
     super(entity);
@@ -20,21 +24,19 @@ public class PartnerReferenceDto extends AbstractEntityDto<Partner> {
   public static PartnerReferenceDto of(Partner entity) {
     var dto = new PartnerReferenceDto(entity);
     dto.name = entity.name;
+    dto.services =
+        entity.services.stream().map(PartnerServiceTypeDto::of).collect(Collectors.toList());
     return dto;
   }
 
   @Override
   public Partner prepareNewEntity() {
-    var entity = new Partner();
-    entity.name = name;
-    return entity;
+    throw new IllegalArgumentException("Don't create a new entity with a reference!");
   }
 
   @Override
   public Partner prepareUpdateEntity() {
-    var entity = Partner.byId(id);
-    entity.name = name;
-    return entity;
+    throw new IllegalArgumentException("Don't update a new entity with a reference!");
   }
 
   @Override

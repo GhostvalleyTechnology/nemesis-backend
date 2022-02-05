@@ -1,9 +1,6 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.ClientContract;
-import com.quellkunst.nemesis.model.Partner;
-import com.quellkunst.nemesis.model.PartnerServiceType;
-import com.quellkunst.nemesis.model.PaymentFrequency;
+import com.quellkunst.nemesis.model.*;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @RegisterForReflection
 public class ClientContractDto extends AbstractEntityDto<ClientContract> {
+  long clientId;
   boolean legacy;
   String contractNumber;
   long paymentValue;
   PaymentFrequency paymentFrequency;
   PartnerReferenceDto contractor;
   PartnerServiceTypeDto serviceType;
+  Long fileId;
 
   protected ClientContractDto(ClientContract entity) {
     super(entity);
@@ -27,10 +26,12 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
 
   public static ClientContractDto of(ClientContract entity) {
     var dto = new ClientContractDto(entity);
+    dto.clientId = entity.client.id;
     dto.legacy = entity.legacy;
     dto.contractNumber = entity.contractNumber;
     dto.paymentValue = entity.paymentValue;
     dto.paymentFrequency = entity.paymentFrequency;
+    dto.fileId = entity.fileId;
     dto.contractor = PartnerReferenceDto.of(entity.contractor);
     dto.serviceType = PartnerServiceTypeDto.of(entity.serviceType);
     return dto;
@@ -38,7 +39,11 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
 
   @Override
   protected ClientContract prepareNewEntity() {
-    return mapValues(new ClientContract());
+    var entity = new ClientContract();
+    mapValues(entity);
+    entity.client = Client.byId(clientId);
+    entity.client.clientContracts.add(entity);
+    return entity;
   }
 
   private ClientContract mapValues(ClientContract entity) {
@@ -46,6 +51,7 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
     entity.contractNumber = contractNumber;
     entity.paymentValue = paymentValue;
     entity.paymentFrequency = paymentFrequency;
+    entity.fileId = fileId;
     entity.contractor = Partner.byId(contractor.id);
     entity.serviceType = PartnerServiceType.byId(serviceType.id);
     return entity;

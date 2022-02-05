@@ -1,6 +1,5 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.PaymentFrequency;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
@@ -9,27 +8,7 @@ import javax.ws.rs.core.MediaType;
 
 @RegisterForReflection
 public class ClientContractUploadDto extends AbstractFileBasedDto {
-  @FormParam("clientId")
+  @FormParam("clientContractId")
   @PartType(MediaType.TEXT_PLAIN)
-  public long clientId;
-
-  @FormParam("legacy")
-  @PartType(MediaType.TEXT_PLAIN)
-  public boolean legacy;
-
-  @FormParam("contractNumber")
-  @PartType(MediaType.TEXT_PLAIN)
-  public String contractNumber;
-
-  @FormParam("paymentValue")
-  @PartType(MediaType.TEXT_PLAIN)
-  public long paymentValue;
-
-  @FormParam("paymentFrequency")
-  @PartType(MediaType.TEXT_PLAIN)
-  public PaymentFrequency paymentFrequency;
-
-  @FormParam("contractorId")
-  @PartType(MediaType.TEXT_PLAIN)
-  public long contractorId;
+  public long clientContractId;
 }
