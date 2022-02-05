@@ -1,8 +1,0 @@
-{
-  "realm": "quarkus",
-  "auth-server-url": "http://localhost:8095/auth/",
-  "ssl-required": "external",
-  "resource": "nemesis",
-  "public-client": true,
-  "confidential-port": 0
-}
