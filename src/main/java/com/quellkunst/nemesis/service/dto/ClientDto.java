@@ -29,6 +29,7 @@ public class ClientDto extends AbstractPersonDto<Client> {
   GenericPersonDto partner;
   List<GenericPersonDto> children;
   List<ClientContractDto> contracts;
+  List<ClientDocumentDto> documents;
   List<ProofOfIdentityDto> proofOfIdentities;
 
   protected ClientDto(Client entity) {
@@ -50,6 +51,8 @@ public class ClientDto extends AbstractPersonDto<Client> {
     dto.children = entity.children.stream().map(GenericPersonDto::of).collect(Collectors.toList());
     dto.contracts =
         entity.clientContracts.stream().map(ClientContractDto::of).collect(Collectors.toList());
+    dto.documents =
+        entity.clientDocuments.stream().map(ClientDocumentDto::of).collect(Collectors.toList());
     dto.proofOfIdentities =
         entity.proofOfIdentities.stream().map(ProofOfIdentityDto::of).collect(Collectors.toList());
     dto.bank = entity.bank;
@@ -89,6 +92,8 @@ public class ClientDto extends AbstractPersonDto<Client> {
         children.stream().map(GenericPersonDto::createOrUpdateEntity).collect(Collectors.toList());
     entity.clientContracts =
         contracts.stream().map(ClientContractDto::getEntity).collect(Collectors.toList());
+    entity.clientDocuments =
+        documents.stream().map(ClientDocumentDto::getEntity).collect(Collectors.toList());
     entity.proofOfIdentities =
         proofOfIdentities.stream().map(ProofOfIdentityDto::getEntity).collect(Collectors.toList());
     return entity;

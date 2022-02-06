@@ -44,6 +44,7 @@ public abstract class AbstractEntityDto<T extends EntityBase> implements Identif
     var entity = prepareNewEntity();
     entity.persist();
     id = entity.id;
+    createdAt = entity.createdAt;
     return entity;
   }
 

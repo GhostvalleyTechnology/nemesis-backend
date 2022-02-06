@@ -36,6 +36,9 @@ public class Client extends Person {
   public List<ClientContract> clientContracts;
 
   @OneToMany(orphanRemoval = true)
+  public List<ClientDocument> clientDocuments;
+
+  @OneToMany(orphanRemoval = true)
   public List<ProofOfIdentity> proofOfIdentities;
 
   public String bank;
