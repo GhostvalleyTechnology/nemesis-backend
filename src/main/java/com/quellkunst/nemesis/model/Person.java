@@ -1,14 +1,15 @@
 package com.quellkunst.nemesis.model;
 
-import lombok.NoArgsConstructor;
-
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @MappedSuperclass
 @NoArgsConstructor
-public class Person extends EntityBase {
+@AllArgsConstructor
+public abstract class Person extends EntityBase {
   @Column(nullable = false)
   public Gender gender;
 
@@ -36,41 +37,4 @@ public class Person extends EntityBase {
   public String zipCode;
   public String city;
   public String address;
-
-  public Person(
-      Gender gender,
-      String firstName,
-      String lastName,
-      String email,
-      String phone,
-      String mobile,
-      String title,
-      String academicDegree,
-      LocalDate birthday,
-      String birthPlace,
-      Country nationality,
-      String socialInsuranceInstitution,
-      String occupation,
-      Country country,
-      String zipCode,
-      String city,
-      String address) {
-    this.gender = gender;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.phone = phone;
-    this.mobile = mobile;
-    this.title = title;
-    this.academicDegree = academicDegree;
-    this.birthday = birthday;
-    this.birthPlace = birthPlace;
-    this.nationality = nationality;
-    this.socialInsuranceInstitution = socialInsuranceInstitution;
-    this.occupation = occupation;
-    this.country = country;
-    this.zipCode = zipCode;
-    this.city = city;
-    this.address = address;
-  }
 }

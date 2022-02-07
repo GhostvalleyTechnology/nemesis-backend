@@ -32,13 +32,8 @@ public class PartnerServiceTypeDto extends AbstractEntityDto<PartnerServiceType>
 
   @Override
   public PartnerServiceType prepareUpdateEntity() {
-    var entity = PartnerServiceType.byId(id);
+    PartnerServiceType entity = PartnerServiceType.byId(id);
     entity.service = service;
     return entity;
-  }
-
-  @Override
-  public PartnerServiceType getEntity() {
-    return PartnerServiceType.byId(id);
   }
 }

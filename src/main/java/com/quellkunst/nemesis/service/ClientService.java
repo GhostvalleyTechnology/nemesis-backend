@@ -6,8 +6,9 @@ import com.quellkunst.nemesis.model.Reminder;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientDto;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.DELETE;
@@ -17,9 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Transactional
 @Path(ClientService.PATH_PART)
@@ -27,6 +26,7 @@ public class ClientService {
   public static final String PATH_PART = "/client";
 
   @Inject AppContext context;
+  @Inject AppResponse appResponse;
   @Inject Guard guard;
 
   @GET
@@ -42,11 +42,11 @@ public class ClientService {
   @POST
   @Path("/add")
   public Response add(ClientDto dto, @Context UriInfo uriInfo) {
-    Client client = dto.getEntity();
+    Client client = Client.byId(dto.getId());
     client.supervisor = context.getCurrentEmployee();
     client.persist();
     Reminder.createNewClientReminders(client);
-    return AppResponse.created(PATH_PART, uriInfo, client);
+    return appResponse.created(PATH_PART, uriInfo, client);
   }
 
   @GET
@@ -59,7 +59,7 @@ public class ClientService {
   @Path("/update")
   public Response update(ClientDto client) {
     client.updateEntity();
-    return AppResponse.ok();
+    return appResponse.ok();
   }
 
   @DELETE
@@ -67,12 +67,12 @@ public class ClientService {
   public Response delete(@PathParam long clientId) {
     guard.asAdmin(
         () -> {
-          var client = Client.byId(clientId);
+          Client client = Client.byId(clientId);
           client.deleted = true;
           client.persist();
         });
 
-    return AppResponse.ok();
+    return appResponse.ok();
   }
 
   @GET

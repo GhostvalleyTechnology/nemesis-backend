@@ -21,7 +21,7 @@ public class TemplateDto extends AbstractEntityDto<Template> {
   public static TemplateDto of(Template entity) {
     var dto = new TemplateDto(entity);
     dto.adminOnly = entity.adminOnly;
-    dto.fileName = entity.fileName;
+    dto.fileName = entity.file.fileName;
     return dto;
   }
 
@@ -29,20 +29,13 @@ public class TemplateDto extends AbstractEntityDto<Template> {
   protected Template prepareNewEntity() {
     var entity = new Template();
     entity.adminOnly = adminOnly;
-    entity.fileName = fileName;
     return entity;
   }
 
   @Override
   protected Template prepareUpdateEntity() {
-    var entity = Template.byId(id);
+    Template entity = Template.byId(id);
     entity.adminOnly = adminOnly;
-    entity.fileName = fileName;
     return entity;
-  }
-
-  @Override
-  public Template getEntity() {
-    return Template.byId(id);
   }
 }

@@ -46,9 +46,4 @@ public class PartnerContactDto extends AbstractEntityDto<PartnerContact> {
   public PartnerContact prepareUpdateEntity() {
     return mapValues(PartnerContact.byId(id));
   }
-
-  @Override
-  public PartnerContact getEntity() {
-    return PartnerContact.byId(id);
-  }
 }

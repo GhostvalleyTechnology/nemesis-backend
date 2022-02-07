@@ -18,7 +18,6 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
   PaymentFrequency paymentFrequency;
   PartnerReferenceDto contractor;
   PartnerServiceTypeDto serviceType;
-  Long fileId;
 
   protected ClientContractDto(ClientContract entity) {
     super(entity);
@@ -31,7 +30,6 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
     dto.contractNumber = entity.contractNumber;
     dto.paymentValue = entity.paymentValue;
     dto.paymentFrequency = entity.paymentFrequency;
-    dto.fileId = entity.fileId;
     dto.contractor = PartnerReferenceDto.of(entity.contractor);
     dto.serviceType = PartnerServiceTypeDto.of(entity.serviceType);
     return dto;
@@ -51,7 +49,6 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
     entity.contractNumber = contractNumber;
     entity.paymentValue = paymentValue;
     entity.paymentFrequency = paymentFrequency;
-    entity.fileId = fileId;
     entity.contractor = Partner.byId(contractor.id);
     entity.serviceType = PartnerServiceType.byId(serviceType.id);
     return entity;
@@ -60,10 +57,5 @@ public class ClientContractDto extends AbstractEntityDto<ClientContract> {
   @Override
   protected ClientContract prepareUpdateEntity() {
     return mapValues(ClientContract.byId(id));
-  }
-
-  @Override
-  public ClientContract getEntity() {
-    return ClientContract.byId(id);
   }
 }

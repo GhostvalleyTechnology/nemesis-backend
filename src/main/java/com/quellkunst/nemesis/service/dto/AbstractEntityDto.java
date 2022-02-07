@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quellkunst.nemesis.Identifiable;
 import com.quellkunst.nemesis.model.EntityBase;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @RegisterForReflection
@@ -28,9 +27,6 @@ public abstract class AbstractEntityDto<T extends EntityBase> implements Identif
   protected abstract T prepareNewEntity();
 
   protected abstract T prepareUpdateEntity();
-
-  @JsonIgnore
-  public abstract T getEntity();
 
   @JsonIgnore
   protected T createOrUpdateEntity() {

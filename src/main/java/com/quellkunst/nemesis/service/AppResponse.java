@@ -1,24 +1,30 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.Identifiable;
-import com.quellkunst.nemesis.service.dto.FileDto;
-
+import com.quellkunst.nemesis.model.GoogleFile;
+import com.quellkunst.nemesis.security.ExceptionSupplier;
+import com.quellkunst.nemesis.security.GoogleStorage;
+import io.quarkus.logging.Log;
+import java.net.URI;
+import java.net.URISyntaxException;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
+@ApplicationScoped
 public class AppResponse {
-  private AppResponse() {}
+  @Inject GoogleStorage googleStorage;
 
-  public static Response ok() {
+  public Response ok() {
     return Response.ok().build();
   }
 
-  public static Response deleted(boolean deleted) {
+  public Response deleted(boolean deleted) {
     return Response.status(deleted ? Response.Status.OK : Response.Status.NOT_FOUND).build();
   }
 
-  public static Response created(String pathPart, UriInfo uriInfo, Identifiable identifiable) {
+  public Response created(String pathPart, UriInfo uriInfo, Identifiable identifiable) {
     var baseUri = uriInfo.getBaseUri().toString();
     // substring 5: length -1 - "/api"
     var location =
@@ -26,8 +32,13 @@ public class AppResponse {
     return Response.created(URI.create(location)).build();
   }
 
-  public static FileDto fileDownload(FileEntityBase entityBase) {
-    // var base64Encoded = Base64.getEncoder().encodeToString(file.data);
-    return FileDto.of(File.byId(entityBase.fileId));
+  public Response fileDownload(GoogleFile googleFile) {
+    var url = googleStorage.download(googleFile);
+    try {
+      return Response.status(Response.Status.FOUND).contentLocation(url.toURI()).build();
+    } catch (URISyntaxException e) {
+      Log.error(e);
+      throw ExceptionSupplier.serviceUnavailableException("Download not available.").get();
+    }
   }
 }

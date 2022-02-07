@@ -37,11 +37,6 @@ public class EmployeeDto extends AbstractEntityDto<Employee> {
     return mapValues(Employee.byId(id));
   }
 
-  @Override
-  public Employee getEntity() {
-    return Employee.byId(id);
-  }
-
   private Employee mapValues(Employee entity) {
     entity.name = name;
     entity.email = email;

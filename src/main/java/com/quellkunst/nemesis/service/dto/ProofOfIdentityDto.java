@@ -22,7 +22,7 @@ public class ProofOfIdentityDto extends AbstractEntityDto<ProofOfIdentity> {
   public static ProofOfIdentityDto of(ProofOfIdentity entity) {
     var dto = new ProofOfIdentityDto(entity);
     dto.type = entity.type;
-    dto.fileName = entity.fileName;
+    dto.fileName = entity.file.fileName;
     return dto;
   }
 
@@ -30,20 +30,13 @@ public class ProofOfIdentityDto extends AbstractEntityDto<ProofOfIdentity> {
   protected ProofOfIdentity prepareNewEntity() {
     var entity = new ProofOfIdentity();
     entity.type = type;
-    entity.fileName = fileName;
     return entity;
   }
 
   @Override
   protected ProofOfIdentity prepareUpdateEntity() {
-    var entity = ProofOfIdentity.byId(id);
+    ProofOfIdentity entity = ProofOfIdentity.byId(id);
     entity.type = type;
-    entity.fileName = fileName;
     return entity;
-  }
-
-  @Override
-  public ProofOfIdentity getEntity() {
-    return ProofOfIdentity.byId(id);
   }
 }

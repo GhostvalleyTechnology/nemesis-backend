@@ -31,9 +31,4 @@ public class GenericPersonDto extends AbstractPersonDto<GenericPerson> {
   protected GenericPerson prepareUpdateEntity() {
     return mapPersonValues(GenericPerson.byId(id));
   }
-
-  @Override
-  public GenericPerson getEntity() {
-    return GenericPerson.byId(id);
-  }
 }

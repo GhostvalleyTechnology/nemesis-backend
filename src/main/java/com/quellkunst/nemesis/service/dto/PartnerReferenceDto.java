@@ -2,12 +2,11 @@ package com.quellkunst.nemesis.service.dto;
 
 import com.quellkunst.nemesis.model.Partner;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -37,10 +36,5 @@ public class PartnerReferenceDto extends AbstractEntityDto<Partner> {
   @Override
   public Partner prepareUpdateEntity() {
     throw new IllegalArgumentException("Don't update a new entity with a reference!");
-  }
-
-  @Override
-  public Partner getEntity() {
-    return Partner.byId(id);
   }
 }

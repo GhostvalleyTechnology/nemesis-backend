@@ -4,13 +4,12 @@ import com.quellkunst.nemesis.model.*;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.service.dto.EmployeeDto;
 import io.quarkus.runtime.LaunchMode;
-
+import java.time.LocalDate;
+import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import java.time.LocalDate;
-import java.util.TreeSet;
 
 @Transactional
 @Path("/me")

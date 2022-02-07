@@ -1,13 +1,13 @@
 package com.quellkunst.nemesis.service.dto;
 
+import com.quellkunst.nemesis.model.GoogleFile;
+import com.quellkunst.nemesis.security.GoogleStorage;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import org.jboss.resteasy.annotations.providers.multipart.PartType;
-
-import javax.ws.rs.BadRequestException;
+import java.io.InputStream;
+import javax.enterprise.inject.spi.CDI;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.io.InputStream;
+import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 @RegisterForReflection
 public abstract class AbstractFileBasedDto {
@@ -27,17 +27,9 @@ public abstract class AbstractFileBasedDto {
     return file != null;
   }
 
-  public byte[] readFile() {
-    try {
-      return file.readAllBytes();
-    } catch (IOException e) {
-      throw new BadRequestException(e);
-    }
-  }
-
-  public long persist() {
-    var file = File.builder().name(fileName).extension(fileExtension).data(readFile()).build();
-    file.persist();
-    return file.id;
+  public GoogleFile persist() {
+    var entity = GoogleFile.builder().fileName(fileName).fileExtension(fileExtension).build();
+    CDI.current().select(GoogleStorage.class).get().upload(entity, this);
+    return entity;
   }
 }

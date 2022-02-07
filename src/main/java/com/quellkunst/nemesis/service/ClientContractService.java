@@ -4,20 +4,19 @@ import com.quellkunst.nemesis.model.ClientContract;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientContractDto;
 import com.quellkunst.nemesis.service.dto.ClientContractUploadDto;
-import com.quellkunst.nemesis.service.dto.FileDto;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 @Path("/client-contract")
 @Transactional
 public class ClientContractService {
   @Inject Guard guard;
+  @Inject AppResponse appResponse;
 
   @POST
   @Path("/add")
@@ -27,26 +26,41 @@ public class ClientContractService {
 
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
-  @Path("/upload")
-  public Response upload(@MultipartForm ClientContractUploadDto input) {
+  @Path("/upload-policy")
+  public Response uploadPolicy(@MultipartForm ClientContractUploadDto input) {
     ClientContract contract = ClientContract.byId(input.clientContractId);
-    contract.fileId = input.persist();
-    contract.fileName = input.fileName;
-    return AppResponse.ok();
+    contract.policy = input.persist();
+    return appResponse.ok();
+  }
+
+  @POST
+  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  @Path("/upload-policy-request")
+  public Response uploadPolicyRequest(@MultipartForm ClientContractUploadDto input) {
+    ClientContract contract = ClientContract.byId(input.clientContractId);
+    contract.policyRequest = input.persist();
+    return appResponse.ok();
   }
 
   @POST
   @Path("/update")
   public Response update(ClientContractDto dto) {
     dto.updateEntity();
-    return AppResponse.ok();
+    return appResponse.ok();
   }
 
   @GET
-  @Path("/get/{contractId}")
-  public FileDto get(@PathParam long contractId) {
+  @Path("/get-policy/{contractId}")
+  public Response getPolicy(@PathParam long contractId) {
     ClientContract contract = ClientContract.byId(contractId);
-    return AppResponse.fileDownload(contract);
+    return appResponse.fileDownload(contract.policy);
+  }
+
+  @GET
+  @Path("/get-policy-request/{contractId}")
+  public Response getPolicyRequest(@PathParam long contractId) {
+    ClientContract contract = ClientContract.byId(contractId);
+    return appResponse.fileDownload(contract.policyRequest);
   }
 
   @DELETE
@@ -54,6 +68,6 @@ public class ClientContractService {
   public Response delete(@PathParam long id) {
     ClientContract contract = ClientContract.byId(id);
     contract.client.clientContracts.remove(contract);
-    return AppResponse.deleted(ClientContract.deleteById(id));
+    return appResponse.deleted(ClientContract.deleteById(id));
   }
 }

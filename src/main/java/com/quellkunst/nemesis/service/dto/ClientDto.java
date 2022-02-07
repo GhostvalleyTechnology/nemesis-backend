@@ -1,14 +1,12 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.Client;
-import com.quellkunst.nemesis.model.MaritalStatus;
+import com.quellkunst.nemesis.model.*;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -71,11 +69,6 @@ public class ClientDto extends AbstractPersonDto<Client> {
     return mapClientValues(mapPersonValues(Client.byId(id)));
   }
 
-  @Override
-  public Client getEntity() {
-    return Client.byId(id);
-  }
-
   private Client mapClientValues(Client entity) {
     entity.militaryServiceDone = militaryServiceDone;
     entity.smoker = smoker;
@@ -91,11 +84,17 @@ public class ClientDto extends AbstractPersonDto<Client> {
     entity.children =
         children.stream().map(GenericPersonDto::createOrUpdateEntity).collect(Collectors.toList());
     entity.clientContracts =
-        contracts.stream().map(ClientContractDto::getEntity).collect(Collectors.toList());
+        contracts.stream()
+            .map(c -> (ClientContract) ClientContract.byId(c.id))
+            .collect(Collectors.toList());
     entity.clientDocuments =
-        documents.stream().map(ClientDocumentDto::getEntity).collect(Collectors.toList());
+        documents.stream()
+            .map(d -> (ClientDocument) ClientDocument.byId(d.id))
+            .collect(Collectors.toList());
     entity.proofOfIdentities =
-        proofOfIdentities.stream().map(ProofOfIdentityDto::getEntity).collect(Collectors.toList());
+        proofOfIdentities.stream()
+            .map(i -> (ProofOfIdentity) ProofOfIdentity.byId(i.id))
+            .collect(Collectors.toList());
     return entity;
   }
 }

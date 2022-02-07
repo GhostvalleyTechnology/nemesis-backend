@@ -1,14 +1,14 @@
 package com.quellkunst.nemesis.service.dto;
 
 import com.quellkunst.nemesis.model.Partner;
+import com.quellkunst.nemesis.model.PartnerServiceType;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -60,17 +60,12 @@ public class PartnerDto extends AbstractEntityDto<Partner> {
     entity.bic = bic;
     entity.services =
         services.stream()
-            .map(PartnerServiceTypeDto::getEntity)
+            .map(t -> (PartnerServiceType) PartnerServiceType.byId(t.id))
             .collect(Collectors.toCollection(TreeSet::new));
     entity.logins =
         logins.stream().map(PartnerLoginDto::createOrUpdateEntity).collect(Collectors.toList());
     entity.contacts =
         contacts.stream().map(PartnerContactDto::createOrUpdateEntity).collect(Collectors.toList());
     return entity;
-  }
-
-  @Override
-  public Partner getEntity() {
-    return Partner.byId(id);
   }
 }

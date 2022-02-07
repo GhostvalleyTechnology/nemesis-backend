@@ -17,24 +17,17 @@ public class ClientDocumentDto extends AbstractEntityDto<ClientDocument> {
     var dto = new ClientDocumentDto();
     dto.id = entity.id;
     dto.createdAt = entity.createdAt;
-    dto.fileName = entity.fileName;
+    dto.fileName = entity.file.fileName;
     return dto;
   }
 
   @Override
   protected ClientDocument prepareNewEntity() {
-    var entity = new ClientDocument();
-    entity.fileName = fileName;
-    return entity;
+    return new ClientDocument();
   }
 
   @Override
   protected ClientDocument prepareUpdateEntity() {
-    return ClientDocument.byId(id);
-  }
-
-  @Override
-  public ClientDocument getEntity() {
     return ClientDocument.byId(id);
   }
 }

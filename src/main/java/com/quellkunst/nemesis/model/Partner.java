@@ -1,18 +1,14 @@
 package com.quellkunst.nemesis.model;
 
+import java.util.List;
+import java.util.SortedSet;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.SortNatural;
-
-import javax.persistence.*;
-import java.util.List;
-import java.util.Optional;
-import java.util.SortedSet;
-
-import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
 @AllArgsConstructor
 @NoArgsConstructor

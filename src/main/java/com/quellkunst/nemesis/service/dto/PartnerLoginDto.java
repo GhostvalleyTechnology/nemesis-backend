@@ -39,11 +39,6 @@ public class PartnerLoginDto extends AbstractEntityDto<PartnerLogin> {
     return mapValues(PartnerLogin.byId(id));
   }
 
-  @Override
-  public PartnerLogin getEntity() {
-    return PartnerLogin.byId(id);
-  }
-
   private PartnerLogin mapValues(PartnerLogin entity) {
     entity.link = link;
     entity.username = username;

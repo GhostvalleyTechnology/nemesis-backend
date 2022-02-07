@@ -4,11 +4,10 @@ import com.quellkunst.nemesis.model.Country;
 import com.quellkunst.nemesis.model.Gender;
 import com.quellkunst.nemesis.model.Person;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter

@@ -4,7 +4,6 @@ import com.quellkunst.nemesis.security.AppContext;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.Mailer;
 import io.smallrye.common.annotation.Blocking;
-
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -13,8 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 @Path("/hello")
 public class ExampleResource {
-  @Inject
-  AppContext context;
+  @Inject AppContext context;
 
   @GET
   @Produces(MediaType.TEXT_PLAIN)

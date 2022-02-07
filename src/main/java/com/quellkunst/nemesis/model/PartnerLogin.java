@@ -1,13 +1,9 @@
 package com.quellkunst.nemesis.model;
 
+import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Entity;
-import java.util.Optional;
-
-import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +14,4 @@ public class PartnerLogin extends EntityBase {
   public String username;
   public String password;
   public boolean adminOnly;
-
 }

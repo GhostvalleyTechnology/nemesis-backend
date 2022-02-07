@@ -3,7 +3,6 @@ package com.quellkunst.nemesis.service;
 import com.quellkunst.nemesis.model.Reminder;
 import com.quellkunst.nemesis.security.Guard;
 import io.quarkus.mailer.Mailer;
-
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.POST;
