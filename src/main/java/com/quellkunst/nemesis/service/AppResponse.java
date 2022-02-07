@@ -1,8 +1,6 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.Identifiable;
-import com.quellkunst.nemesis.model.File;
-import com.quellkunst.nemesis.model.FileEntityBase;
 import com.quellkunst.nemesis.service.dto.FileDto;
 
 import javax.ws.rs.core.Response;

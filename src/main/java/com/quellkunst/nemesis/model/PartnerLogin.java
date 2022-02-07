@@ -1,5 +1,7 @@
 package com.quellkunst.nemesis.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -7,7 +9,9 @@ import java.util.Optional;
 
 import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 public class PartnerLogin extends EntityBase {
   public String link;
@@ -15,8 +19,4 @@ public class PartnerLogin extends EntityBase {
   public String password;
   public boolean adminOnly;
 
-  public static PartnerLogin byId(long id) {
-    Optional<PartnerLogin> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
 }

@@ -1,5 +1,6 @@
 package com.quellkunst.nemesis.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -10,27 +11,16 @@ import java.util.Optional;
 import static com.quellkunst.nemesis.security.ExceptionSupplier.forbiddenException;
 import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
-@Entity
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Entity
 public class Employee extends EntityBase {
   public String name;
 
   @Column(unique = true)
   public String email;
-
   public boolean admin;
-
-  @Builder
-  public Employee(String name, String email, boolean admin) {
-    this.name = name;
-    this.email = email;
-    this.admin = admin;
-  }
-
-  public static Employee byId(long id) {
-    Optional<Employee> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
 
   public static Optional<Employee> findByEmail(String email) {
     return find(Employee_.EMAIL, email).firstResultOptional();

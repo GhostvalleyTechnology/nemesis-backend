@@ -1,5 +1,6 @@
 package com.quellkunst.nemesis.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
@@ -13,7 +14,9 @@ import java.util.SortedSet;
 
 import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 public class Partner extends EntityBase {
   @Column(unique = true)
@@ -40,29 +43,4 @@ public class Partner extends EntityBase {
   @SortNatural
   @LazyCollection(LazyCollectionOption.FALSE)
   public SortedSet<PartnerServiceType> services;
-
-  @Builder
-  public Partner(
-      String name,
-      String website,
-      String bank,
-      String iban,
-      String bic,
-      List<PartnerContact> contacts,
-      List<PartnerLogin> logins,
-      SortedSet<PartnerServiceType> services) {
-    this.name = name;
-    this.website = website;
-    this.bank = bank;
-    this.iban = iban;
-    this.bic = bic;
-    this.contacts = contacts;
-    this.logins = logins;
-    this.services = services;
-  }
-
-  public static Partner byId(long id) {
-    Optional<Partner> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
 }

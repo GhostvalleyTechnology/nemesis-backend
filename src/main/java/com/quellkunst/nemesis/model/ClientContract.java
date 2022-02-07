@@ -1,17 +1,21 @@
 package com.quellkunst.nemesis.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.util.Optional;
 
 import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
-public class ClientContract extends FileEntityBase {
+public class ClientContract extends EntityBase {
   @ManyToOne public Client client;
   public boolean legacy;
   public String contractNumber;
@@ -19,28 +23,6 @@ public class ClientContract extends FileEntityBase {
   public PaymentFrequency paymentFrequency;
   @ManyToOne public Partner contractor;
   @ManyToOne public PartnerServiceType serviceType;
-
-  @Builder
-  public ClientContract(
-      String fileName,
-      Long fileId,
-      boolean legacy,
-      String contractNumber,
-      long paymentValue,
-      PaymentFrequency paymentFrequency,
-      Partner contractor,
-      PartnerServiceType serviceType) {
-    super(fileName, fileId);
-    this.legacy = legacy;
-    this.contractNumber = contractNumber;
-    this.paymentValue = paymentValue;
-    this.paymentFrequency = paymentFrequency;
-    this.contractor = contractor;
-    this.serviceType = serviceType;
-  }
-
-  public static ClientContract byId(long id) {
-    Optional<ClientContract> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
+  @Embedded public GoogleFile policyRequest;
+  @Embedded public GoogleFile policy;
 }

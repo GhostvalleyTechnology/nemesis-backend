@@ -29,7 +29,7 @@ public class ClientContractService {
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/upload")
   public Response upload(@MultipartForm ClientContractUploadDto input) {
-    var contract = ClientContract.byId(input.clientContractId);
+    ClientContract contract = ClientContract.byId(input.clientContractId);
     contract.fileId = input.persist();
     contract.fileName = input.fileName;
     return AppResponse.ok();
@@ -52,7 +52,7 @@ public class ClientContractService {
   @DELETE
   @Path("/delete/{id}")
   public Response delete(@PathParam long id) {
-    var contract = ClientContract.byId(id);
+    ClientContract contract = ClientContract.byId(id);
     contract.client.clientContracts.remove(contract);
     return AppResponse.deleted(ClientContract.deleteById(id));
   }

@@ -1,6 +1,5 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.File;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import java.util.Base64;

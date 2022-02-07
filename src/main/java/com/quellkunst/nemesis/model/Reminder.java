@@ -1,6 +1,7 @@
 package com.quellkunst.nemesis.model;
 
 import io.quarkus.mailer.Mail;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -11,8 +12,10 @@ import javax.persistence.Transient;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Entity
 public class Reminder extends EntityBase {
   @ManyToOne public Employee employee;
 
@@ -25,24 +28,6 @@ public class Reminder extends EntityBase {
   @ManyToOne public Client client;
   public boolean done;
   public boolean sent;
-
-  @Builder
-  public Reminder(
-      Employee employee,
-      ReminderType type,
-      String name,
-      String text,
-      LocalDate due,
-      Client client) {
-    this.employee = employee;
-    this.type = type;
-    this.name = name;
-    this.text = text;
-    this.due = due;
-    this.client = client;
-    this.done = false;
-    this.sent = false;
-  }
 
   public static void createNewClientReminders(Client client) {
     Reminder.builder()
