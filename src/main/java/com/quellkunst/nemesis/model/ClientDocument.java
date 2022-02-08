@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class ClientDocument extends EntityBase {
   @ManyToOne public Client client;
   public ClientDocumentType type;
-  @Embedded public GoogleFile file;
+  @Embedded public CloudFile file;
 }

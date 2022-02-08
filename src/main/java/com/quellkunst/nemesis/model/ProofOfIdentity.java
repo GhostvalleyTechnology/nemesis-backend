@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class ProofOfIdentity extends EntityBase {
   public ProofOfIdentityType type;
-  @Embedded public GoogleFile file;
+  @Embedded public CloudFile file;
 
   public void removeFromClient() {
     var query =

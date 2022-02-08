@@ -1,12 +1,12 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Partner;
+import com.quellkunst.nemesis.repository.PartnerRepository;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.PartnerDto;
 import com.quellkunst.nemesis.service.dto.PartnerReferenceDto;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
@@ -15,7 +15,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @Path(PartnerService.PATH_PART)
@@ -23,6 +25,7 @@ public class PartnerService {
   public static final String PATH_PART = "/partner";
   @Inject Guard guard;
   @Inject AppResponse appResponse;
+  @Inject PartnerRepository partnerRepository;
 
   @POST
   @Path("/add")
@@ -48,7 +51,7 @@ public class PartnerService {
   @GET
   @Path("/get/{partnerId}")
   public PartnerDto get(@PathParam long partnerId) {
-    return filterLogins(PartnerDto.of(Partner.byId(partnerId)));
+    return filterLogins(PartnerDto.of(partnerRepository.byId(partnerId)));
   }
 
   private PartnerDto filterLogins(PartnerDto partner) {

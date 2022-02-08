@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @RegisterForReflection
 public class TemplateDto extends AbstractEntityDto<Template> {
-  boolean adminOnly;
-  String fileName;
+  private boolean adminOnly;
+  private CloudFileDto cloudFile;
 
   protected TemplateDto(Template entity) {
     super(entity);
@@ -21,7 +21,7 @@ public class TemplateDto extends AbstractEntityDto<Template> {
   public static TemplateDto of(Template entity) {
     var dto = new TemplateDto(entity);
     dto.adminOnly = entity.adminOnly;
-    dto.fileName = entity.file.fileName;
+    dto.cloudFile = CloudFileDto.of(entity.file);
     return dto;
   }
 

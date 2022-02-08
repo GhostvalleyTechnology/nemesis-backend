@@ -19,26 +19,20 @@ public class ClientContract extends EntityBase {
   @ManyToOne public PartnerServiceType serviceType;
 
   @AttributeOverrides({
-    @AttributeOverride(
-        name = "objectName",
-        column = @Column(name = "policy_request_google_object_name")),
-    @AttributeOverride(
-        name = "fileName",
-        column = @Column(name = "policy_request_google_file_name")),
+    @AttributeOverride(name = "objectName", column = @Column(name = "policy_request_object_name")),
+    @AttributeOverride(name = "fileName", column = @Column(name = "policy_request_file_name")),
     @AttributeOverride(
         name = "fileExtension",
-        column = @Column(name = "policy_request_google_file_extension"))
+        column = @Column(name = "policy_request_file_extension"))
   })
   @Embedded
-  public GoogleFile policyRequest;
+  public CloudFile policyRequest;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "objectName", column = @Column(name = "policy_google_object_name")),
-    @AttributeOverride(name = "fileName", column = @Column(name = "policy_google_file_name")),
-    @AttributeOverride(
-        name = "fileExtension",
-        column = @Column(name = "policy_google_file_extension"))
+    @AttributeOverride(name = "objectName", column = @Column(name = "policy_object_name")),
+    @AttributeOverride(name = "fileName", column = @Column(name = "policy_file_name")),
+    @AttributeOverride(name = "fileExtension", column = @Column(name = "policy_file_extension"))
   })
   @Embedded
-  public GoogleFile policy;
+  public CloudFile policy;
 }

@@ -1,6 +1,6 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.GoogleFile;
+import com.quellkunst.nemesis.model.CloudFile;
 import com.quellkunst.nemesis.security.GoogleStorage;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.InputStream;
@@ -27,8 +27,8 @@ public abstract class AbstractFileBasedDto {
     return file != null;
   }
 
-  public GoogleFile persist() {
-    var entity = GoogleFile.builder().fileName(fileName).fileExtension(fileExtension).build();
+  public CloudFile persist() {
+    var entity = CloudFile.builder().fileName(fileName).fileExtension(fileExtension).build();
     CDI.current().select(GoogleStorage.class).get().upload(entity, this);
     return entity;
   }

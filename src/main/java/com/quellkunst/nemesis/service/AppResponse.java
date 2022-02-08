@@ -1,7 +1,7 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.Identifiable;
-import com.quellkunst.nemesis.model.GoogleFile;
+import com.quellkunst.nemesis.model.CloudFile;
 import com.quellkunst.nemesis.security.ExceptionSupplier;
 import com.quellkunst.nemesis.security.GoogleStorage;
 import io.quarkus.logging.Log;
@@ -32,8 +32,8 @@ public class AppResponse {
     return Response.created(URI.create(location)).build();
   }
 
-  public Response fileDownload(GoogleFile googleFile) {
-    var url = googleStorage.download(googleFile);
+  public Response fileDownload(CloudFile cloudFile) {
+    var url = googleStorage.download(cloudFile);
     try {
       return Response.status(Response.Status.FOUND).contentLocation(url.toURI()).build();
     } catch (URISyntaxException e) {

@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @AttributeOverrides({
-  @AttributeOverride(name = "objectName", column = @Column(name = "google_object_name")),
-  @AttributeOverride(name = "fileName", column = @Column(name = "google_file_name")),
-  @AttributeOverride(name = "fileExtension", column = @Column(name = "google_file_extension"))
+  @AttributeOverride(name = "objectName", column = @Column(name = "cloud_object_name")),
+  @AttributeOverride(name = "fileName", column = @Column(name = "cloud_file_name")),
+  @AttributeOverride(name = "fileExtension", column = @Column(name = "cloud_file_extension"))
 })
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GoogleFile {
+public class CloudFile {
   public String objectName;
   public String fileName;
   public String fileExtension;

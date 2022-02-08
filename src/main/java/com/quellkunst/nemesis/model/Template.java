@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Template extends EntityBase {
   public boolean adminOnly;
-  @Embedded public GoogleFile file;
+  @Embedded public CloudFile file;
 }

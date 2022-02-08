@@ -1,11 +1,11 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.model.Employee;
+import com.quellkunst.nemesis.repository.EmployeeRepository;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.EmployeeDto;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
@@ -14,7 +14,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @Path(EmployeeService.PATH_PART)
@@ -22,6 +24,7 @@ public class EmployeeService {
   public static final String PATH_PART = "/employee";
   @Inject Guard guard;
   @Inject AppResponse appResponse;
+  @Inject EmployeeRepository employeeRepository;
 
   @POST
   @Path("/add")
@@ -33,7 +36,7 @@ public class EmployeeService {
   @GET
   @Path("/get/{id}")
   public EmployeeDto get(@PathParam long id) {
-    return guard.asAdmin(() -> EmployeeDto.of(Employee.byId(id)));
+    return guard.asAdmin(() -> EmployeeDto.of(employeeRepository.byId(id)));
   }
 
   @POST

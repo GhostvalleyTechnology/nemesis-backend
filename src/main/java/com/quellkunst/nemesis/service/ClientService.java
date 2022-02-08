@@ -3,6 +3,7 @@ package com.quellkunst.nemesis.service;
 import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.Client_;
 import com.quellkunst.nemesis.model.Reminder;
+import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientDto;
@@ -28,6 +29,7 @@ public class ClientService {
   @Inject AppContext context;
   @Inject AppResponse appResponse;
   @Inject Guard guard;
+  @Inject ClientRepository clientRepository;
 
   @GET
   @Path("/list-all")
@@ -42,7 +44,7 @@ public class ClientService {
   @POST
   @Path("/add")
   public Response add(ClientDto dto, @Context UriInfo uriInfo) {
-    Client client = Client.byId(dto.getId());
+    Client client = clientRepository.byId(dto.getId());
     client.supervisor = context.getCurrentEmployee();
     client.persist();
     Reminder.createNewClientReminders(client);
@@ -52,7 +54,7 @@ public class ClientService {
   @GET
   @Path("/get/{id}")
   public ClientDto get(@PathParam long id) {
-    return ClientDto.of(Client.byId(id));
+    return ClientDto.of(clientRepository.byId(id));
   }
 
   @POST
@@ -67,7 +69,7 @@ public class ClientService {
   public Response delete(@PathParam long clientId) {
     guard.asAdmin(
         () -> {
-          Client client = Client.byId(clientId);
+          Client client = clientRepository.byId(clientId);
           client.deleted = true;
           client.persist();
         });
