@@ -20,12 +20,9 @@ public class GoogleStorage {
   String bucketName;
 
   public void upload(CloudFile entity, AbstractFileBasedDto dto) {
-    var storage = StorageOptions.newBuilder().build().getService();
     entity.objectName = UUID.randomUUID().toString();
-    var blobId = BlobId.of(bucketName, entity.objectName);
-    var blobInfo = BlobInfo.newBuilder(blobId).build();
     try {
-      storage.createFrom(blobInfo, dto.file);
+      getService().createFrom(getBlobInfo(entity), dto.file);
     } catch (IOException e) {
       Log.error(e);
       throw ExceptionSupplier.serviceUnavailableException("Upload currently not possible").get();
@@ -33,8 +30,23 @@ public class GoogleStorage {
   }
 
   public URL download(CloudFile entity) {
-    var storage = StorageOptions.newBuilder().build().getService();
-    var blobInfo = BlobInfo.newBuilder(BlobId.of(bucketName, entity.objectName)).build();
-    return storage.signUrl(blobInfo, 5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+    return getService()
+        .signUrl(getBlobInfo(entity), 5, TimeUnit.MINUTES, Storage.SignUrlOption.withV4Signature());
+  }
+
+  public void delete(CloudFile entity) {
+    getService().delete(getBlobId(entity));
+  }
+
+  private Storage getService() {
+    return StorageOptions.newBuilder().build().getService();
+  }
+
+  private BlobId getBlobId(CloudFile entity) {
+    return BlobId.of(bucketName, entity.objectName);
+  }
+
+  private BlobInfo getBlobInfo(CloudFile entity) {
+    return BlobInfo.newBuilder(getBlobId(entity)).build();
   }
 }

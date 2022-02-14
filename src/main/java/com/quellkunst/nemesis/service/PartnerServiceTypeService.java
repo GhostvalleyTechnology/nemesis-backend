@@ -1,5 +1,7 @@
 package com.quellkunst.nemesis.service;
 
+import com.quellkunst.nemesis.controller.PartnerServiceTypeController;
+import com.quellkunst.nemesis.controller.mapper.PartnerServiceTypeMapper;
 import com.quellkunst.nemesis.model.PartnerServiceType;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.PartnerServiceTypeDto;
@@ -23,24 +25,26 @@ public class PartnerServiceTypeService {
   public static final String PATH_PART = "/partner-service-type";
   @Inject Guard guard;
   @Inject AppResponse appResponse;
+  @Inject PartnerServiceTypeController controller;
+  @Inject PartnerServiceTypeMapper mapper;
 
   @POST
   @Path("/add")
-  public Response add(PartnerServiceTypeDto service, @Context UriInfo uriInfo) {
-    guard.asAdmin(service::newEntity);
-    return appResponse.created(PATH_PART, uriInfo, service);
+  public Response add(PartnerServiceTypeDto dto, @Context UriInfo uriInfo) {
+    var entity = guard.asAdmin(() -> controller.add(dto));
+    return appResponse.created(PATH_PART, uriInfo, entity);
   }
 
   @GET
   @Path("/list")
   public List<PartnerServiceTypeDto> list() {
     Stream<PartnerServiceType> stream = PartnerServiceType.streamAll();
-    return guard.asAdmin(() -> stream.map(PartnerServiceTypeDto::of).collect(Collectors.toList()));
+    return stream.map(mapper::toDto).collect(Collectors.toList());
   }
 
   @DELETE
   @Path("/delete/{id}")
   public Response delete(@PathParam long id) {
-    return appResponse.deleted(guard.asAdmin(() -> PartnerServiceType.deleteById(id)));
+    return guard.asAdmin(() -> appResponse.deleted(controller.delete(id)));
   }
 }

@@ -1,8 +1,9 @@
 package com.quellkunst.nemesis.service;
 
+import com.quellkunst.nemesis.controller.ClientController;
+import com.quellkunst.nemesis.controller.mapper.ClientMapper;
 import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.Client_;
-import com.quellkunst.nemesis.model.Reminder;
 import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.security.Guard;
@@ -29,7 +30,9 @@ public class ClientService {
   @Inject AppContext context;
   @Inject AppResponse appResponse;
   @Inject Guard guard;
-  @Inject ClientRepository clientRepository;
+  @Inject ClientRepository repository;
+  @Inject ClientController controller;
+  @Inject ClientMapper mapper;
 
   @GET
   @Path("/list-all")
@@ -37,54 +40,46 @@ public class ClientService {
     return guard.asAdmin(
         () -> {
           Stream<Client> stream = Client.streamAll();
-          return stream.map(ClientDto::of).collect(Collectors.toList());
+          return stream.map(mapper::toDto).collect(Collectors.toList());
         });
   }
 
   @POST
   @Path("/add")
   public Response add(ClientDto dto, @Context UriInfo uriInfo) {
-    Client client = clientRepository.byId(dto.getId());
-    client.supervisor = context.getCurrentEmployee();
-    client.persist();
-    Reminder.createNewClientReminders(client);
+    var client = controller.add(dto);
     return appResponse.created(PATH_PART, uriInfo, client);
   }
 
   @GET
   @Path("/get/{id}")
   public ClientDto get(@PathParam long id) {
-    return ClientDto.of(clientRepository.byId(id));
+    return mapper.toDto(repository.byId(id));
   }
 
   @POST
   @Path("/update")
-  public Response update(ClientDto client) {
-    client.updateEntity();
+  public Response update(ClientDto dto) {
+    controller.update(dto);
     return appResponse.ok();
   }
 
   @DELETE
   @Path("/delete/{clientId}")
   public Response delete(@PathParam long clientId) {
-    guard.asAdmin(
-        () -> {
-          Client client = clientRepository.byId(clientId);
-          client.deleted = true;
-          client.persist();
-        });
-
+    var client = repository.byId(clientId);
+    guard.asAdmin(() -> controller.delete(client));
     return appResponse.ok();
   }
 
   @GET
   @Path("/list")
   public List<ClientDto> list() {
-    Stream<Client> stream =
-        Client.stream(
+    return repository.stream(
             String.format(
                 "from Client where %s = false and %s = ?1", Client_.DELETED, Client_.SUPERVISOR),
-            context.getCurrentEmployee());
-    return stream.map(ClientDto::of).collect(Collectors.toList());
+            context.getCurrentEmployee())
+        .map(mapper::toDto)
+        .collect(Collectors.toList());
   }
 }

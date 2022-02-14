@@ -1,15 +1,14 @@
 package com.quellkunst.nemesis.service.dto;
 
-import com.quellkunst.nemesis.model.CloudFile;
-import com.quellkunst.nemesis.security.GoogleStorage;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.io.InputStream;
-import javax.enterprise.inject.spi.CDI;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.core.MediaType;
+import lombok.Getter;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 @RegisterForReflection
+@Getter
 public abstract class AbstractFileBasedDto {
   @FormParam("file")
   @PartType(MediaType.APPLICATION_OCTET_STREAM)
@@ -25,11 +24,5 @@ public abstract class AbstractFileBasedDto {
 
   public boolean hasFile() {
     return file != null;
-  }
-
-  public CloudFile persist() {
-    var entity = CloudFile.builder().fileName(fileName).fileExtension(fileExtension).build();
-    CDI.current().select(GoogleStorage.class).get().upload(entity, this);
-    return entity;
   }
 }

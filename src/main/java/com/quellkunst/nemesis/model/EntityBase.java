@@ -2,13 +2,12 @@ package com.quellkunst.nemesis.model;
 
 import com.quellkunst.nemesis.Identifiable;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-
+import java.time.LocalDateTime;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @MappedSuperclass
 @NoArgsConstructor

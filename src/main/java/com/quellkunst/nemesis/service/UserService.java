@@ -1,5 +1,6 @@
 package com.quellkunst.nemesis.service;
 
+import com.quellkunst.nemesis.controller.mapper.EmployeeMapper;
 import com.quellkunst.nemesis.model.*;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.service.dto.EmployeeDto;
@@ -16,13 +17,14 @@ import javax.ws.rs.Path;
 public class UserService {
 
   @Inject AppContext context;
+  @Inject EmployeeMapper employeeMapper;
 
   @GET
   public EmployeeDto get() {
     if (LaunchMode.current().isDevOrTest()) {
       setup();
     }
-    return EmployeeDto.of(context.getCurrentEmployee());
+    return employeeMapper.toDto(context.getCurrentEmployee());
   }
 
   private void setup() {

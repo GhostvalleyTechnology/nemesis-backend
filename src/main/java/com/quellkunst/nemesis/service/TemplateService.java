@@ -1,44 +1,39 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.controller.TemplateController;
+import com.quellkunst.nemesis.controller.mapper.TemplateMapper;
 import com.quellkunst.nemesis.model.Template;
 import com.quellkunst.nemesis.repository.TemplateRepository;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.TemplateDto;
 import com.quellkunst.nemesis.service.dto.TemplateUploadDto;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 @Transactional
 @Path("/template")
 public class TemplateService {
   @Inject Guard guard;
   @Inject AppResponse appResponse;
-  @Inject TemplateRepository templateRepository;
-  @Inject
-  TemplateController controller;
+  @Inject TemplateRepository repository;
+  @Inject TemplateController controller;
+  @Inject TemplateMapper mapper;
 
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.TEXT_PLAIN)
   @Path("/add")
   public Response add(@MultipartForm TemplateUploadDto input) {
-    guard.asAdmin(() -> addTemplate(input));
+    guard.asAdmin(() -> controller.add(input));
     return appResponse.ok();
-  }
-
-  private void addTemplate(TemplateUploadDto input) {
-    var file = input.persist();
-    Template.builder().file(file).adminOnly(input.adminOnly).build().persist();
   }
 
   @GET
@@ -46,17 +41,17 @@ public class TemplateService {
   public List<TemplateDto> list() {
     Stream<Template> stream;
     if (guard.isAdmin()) {
-      stream = Template.streamAll();
+      stream = repository.streamAll();
     } else {
-      stream = Template.stream("from Template where adminOnly = 'false'");
+      stream = repository.streamTemplatesForEmployees();
     }
-    return stream.map(TemplateDto::of).collect(Collectors.toList());
+    return stream.map(mapper::toDto).collect(Collectors.toList());
   }
 
   @GET
   @Path("/get/{templateId}")
   public Response get(@PathParam long templateId) {
-    Template template = templateRepository.byId(templateId);
+    Template template = repository.byId(templateId);
     if (template.adminOnly) {
       return guard.asAdmin(() -> appResponse.fileDownload(template.file));
     }
@@ -73,7 +68,7 @@ public class TemplateService {
   @DELETE
   @Path("/delete/{templateId}")
   public Response delete(@PathParam long templateId) {
-    guard.asAdmin(() -> templateRepository.byId(templateId).delete());
+    guard.asAdmin(() -> repository.byId(templateId).delete());
     return appResponse.ok();
   }
 }
