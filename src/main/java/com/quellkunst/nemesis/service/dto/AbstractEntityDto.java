@@ -5,12 +5,15 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @RegisterForReflection
 public abstract class AbstractEntityDto implements Identifiable {
   long id;
-  @Getter LocalDateTime createdAt;
+  LocalDateTime createdAt;
 
   @Override
   public long getId() {

@@ -11,5 +11,5 @@ import lombok.Setter;
 @RegisterForReflection
 public class TemplateDto extends AbstractEntityDto {
   private boolean adminOnly;
-  private CloudFileDto cloudFile;
+  private CloudFileDto file;
 }

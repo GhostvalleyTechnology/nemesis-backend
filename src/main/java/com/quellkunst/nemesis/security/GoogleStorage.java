@@ -43,7 +43,7 @@ public class GoogleStorage {
   }
 
   private BlobId getBlobId(CloudFile entity) {
-    return BlobId.of(bucketName, entity.objectName);
+    return BlobId.of(bucketName, entity.objectName + "_" + entity.fileName);
   }
 
   private BlobInfo getBlobInfo(CloudFile entity) {

@@ -2,6 +2,7 @@ package com.quellkunst.nemesis.service.dto;
 
 import com.quellkunst.nemesis.model.MaritalStatus;
 import io.quarkus.runtime.annotations.RegisterForReflection;
+import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class ClientDto extends AbstractPersonDto {
   String bic;
   GenericPersonDto partner;
   List<GenericPersonDto> children;
-  List<ClientContractDto> contracts;
-  List<ClientDocumentDto> documents;
-  List<ProofOfIdentityDto> proofOfIdentities;
+  List<ClientContractDto> contracts = Collections.emptyList();
+  List<ClientDocumentDto> documents = Collections.emptyList();
+  List<ProofOfIdentityDto> proofOfIdentities = Collections.emptyList();
 }

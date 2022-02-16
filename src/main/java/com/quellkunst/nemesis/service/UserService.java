@@ -78,5 +78,16 @@ public class UserService {
     Partner.builder().name("Generali").services(services).build().persist();
 
     Partner.builder().name("Muki").services(services).build().persist();
+
+    Template.builder()
+        .adminOnly(false)
+        .file(
+            CloudFile.builder()
+                .objectName("06e25032-3280-46b0-a8a2-d6e06ebf09cb")
+                .fileName("logo.png")
+                .fileExtension("image/png")
+                .build())
+        .build()
+        .persist();
   }
 }

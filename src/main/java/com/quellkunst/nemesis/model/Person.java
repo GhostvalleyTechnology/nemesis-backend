@@ -19,7 +19,6 @@ public abstract class Person extends EntityBase {
   @Column(nullable = false)
   public String lastName;
 
-  @Column(unique = true)
   public String email;
 
   public String phone;

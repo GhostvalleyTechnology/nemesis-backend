@@ -2,11 +2,8 @@ package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.Identifiable;
 import com.quellkunst.nemesis.model.CloudFile;
-import com.quellkunst.nemesis.security.ExceptionSupplier;
 import com.quellkunst.nemesis.security.GoogleStorage;
-import io.quarkus.logging.Log;
 import java.net.URI;
-import java.net.URISyntaxException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -34,11 +31,6 @@ public class AppResponse {
 
   public Response fileDownload(CloudFile cloudFile) {
     var url = googleStorage.download(cloudFile);
-    try {
-      return Response.status(Response.Status.FOUND).contentLocation(url.toURI()).build();
-    } catch (URISyntaxException e) {
-      Log.error(e);
-      throw ExceptionSupplier.serviceUnavailableException("Download not available.").get();
-    }
+    return Response.status(Response.Status.OK).entity(url).build();
   }
 }
