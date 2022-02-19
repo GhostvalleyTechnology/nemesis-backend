@@ -8,9 +8,10 @@ import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientDto;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.eclipse.microprofile.openapi.annotations.headers.Header;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.DELETE;
@@ -20,7 +21,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Transactional
 @Path(ClientService.PATH_PART)
@@ -46,6 +49,9 @@ public class ClientService {
 
   @POST
   @Path("/add")
+  @APIResponse(
+      responseCode = "201",
+      headers = {@Header(name = "location")})
   public Response add(ClientDto dto, @Context UriInfo uriInfo) {
     var client = controller.add(dto);
     return appResponse.created(PATH_PART, uriInfo, client);
@@ -54,7 +60,8 @@ public class ClientService {
   @GET
   @Path("/get/{id}")
   public ClientDto get(@PathParam long id) {
-    return mapper.toDto(repository.byId(id));
+    var client = repository.byId(id);
+    return mapper.toDto(client);
   }
 
   @POST

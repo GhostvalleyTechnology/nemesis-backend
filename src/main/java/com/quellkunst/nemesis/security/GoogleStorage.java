@@ -7,6 +7,7 @@ import com.google.cloud.storage.StorageOptions;
 import com.quellkunst.nemesis.model.CloudFile;
 import com.quellkunst.nemesis.service.dto.AbstractFileBasedDto;
 import io.quarkus.logging.Log;
+import io.quarkus.runtime.LaunchMode;
 import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
@@ -39,11 +40,14 @@ public class GoogleStorage {
   }
 
   private Storage getService() {
+    if (LaunchMode.current().isDevOrTest()) {
+      return new DevStorage();
+    }
     return StorageOptions.newBuilder().build().getService();
   }
 
   private BlobId getBlobId(CloudFile entity) {
-    return BlobId.of(bucketName, entity.objectName + "_" + entity.fileName);
+    return BlobId.of(bucketName, entity.objectName + "/" + entity.fileName);
   }
 
   private BlobInfo getBlobInfo(CloudFile entity) {

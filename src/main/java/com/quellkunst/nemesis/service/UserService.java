@@ -41,8 +41,10 @@ public class UserService {
     var emp = Employee.builder().email("test@quellkunst.com").name("Test").admin(false).build();
     emp.persistAndFlush();
 
-    var spouse =
-        GenericPerson.builder().firstName("Eve").lastName("Paradise").gender(Gender.x).build();
+    var spouse = new GenericPerson();
+    spouse.firstName = "Eve";
+    spouse.lastName = "Paradise";
+    spouse.gender = Gender.x;
     spouse.persist();
 
     var client =

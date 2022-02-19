@@ -1,7 +1,6 @@
 package com.quellkunst.nemesis.model;
 
 import java.time.LocalDate;
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -10,13 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Person extends EntityBase {
-  @Column(nullable = false)
   public Gender gender;
-
-  @Column(nullable = false)
   public String firstName;
-
-  @Column(nullable = false)
   public String lastName;
 
   public String email;

@@ -14,12 +14,11 @@ public class Client extends Person {
   @ManyToOne(optional = false)
   public Employee supervisor;
 
-  @Column(nullable = false)
   public boolean deleted;
 
-  public Boolean militaryServiceDone;
-  public Boolean smoker;
-  public Boolean pets;
+  public boolean militaryServiceDone;
+  public boolean smoker;
+  public boolean pets;
   public String petsRemarks;
   public MaritalStatus maritalStatus;
   public String homeRemarks;

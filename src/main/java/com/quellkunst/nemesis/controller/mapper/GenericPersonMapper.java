@@ -7,7 +7,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Optional;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Qualifier;
 
 @Mapper(config = QuarkusMappingConfig.class)
@@ -16,10 +18,22 @@ public interface GenericPersonMapper {
 
   GenericPerson newEntity(GenericPersonDto dto);
 
+  void updateEntity(GenericPersonDto dto, @MappingTarget GenericPerson entity);
+
+  @AfterMapping
+  default void persist(@MappingTarget GenericPerson entity) {
+    entity.persist();
+  }
+
   @GetOrCreateGenericPerson
   default GenericPerson getOrCreate(GenericPersonDto dto) {
+    if (dto == null) {
+      return null;
+    }
     Optional<GenericPerson> maybe = GenericPerson.findByIdOptional(dto.getId());
-    return maybe.orElseGet(() -> newEntity(dto));
+    var entity = maybe.orElseGet(() -> newEntity(dto));
+    updateEntity(dto, entity);
+    return entity;
   }
 
   @Qualifier
