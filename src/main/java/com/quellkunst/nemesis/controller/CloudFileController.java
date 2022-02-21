@@ -11,11 +11,9 @@ public class CloudFileController {
   @Inject GoogleStorage googleStorage;
 
   public CloudFile add(AbstractFileBasedDto dto) {
-    var entity =
-        CloudFile.builder()
-            .fileName(dto.getFileName())
-            .fileExtension(dto.getFileExtension())
-            .build();
+    var entity = new CloudFile();
+    entity.fileName = dto.getFileName();
+    entity.fileExtension = dto.getFileExtension();
     googleStorage.upload(entity, dto);
     return entity;
   }

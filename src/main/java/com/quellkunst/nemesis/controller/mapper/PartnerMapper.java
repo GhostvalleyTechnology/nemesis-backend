@@ -49,7 +49,7 @@ public interface PartnerMapper {
 
   @GetPartnerThroughReferenceDto
   default Partner get(PartnerReferenceDto dto) {
-    return CDI.current().select(PartnerRepository.class).get().byId(dto.getId());
+    return CDI.current().select(PartnerRepository.class).get().findById(dto.getId());
   }
 
   @Qualifier

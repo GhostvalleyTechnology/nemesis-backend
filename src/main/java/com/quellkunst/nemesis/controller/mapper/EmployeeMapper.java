@@ -8,6 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.enterprise.inject.spi.CDI;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Qualifier;
@@ -23,6 +24,11 @@ public interface EmployeeMapper {
   @GetEmployeeByContext
   default Employee getEmployeeByContext(String ignoredSupervisor) {
     return CDI.current().select(AppContext.class).get().getCurrentEmployee();
+  }
+
+  @AfterMapping
+  default void persist(@MappingTarget Employee entity) {
+    entity.persist();
   }
 
   @Qualifier

@@ -14,7 +14,9 @@ public class TemplateController {
 
   public Template add(TemplateUploadDto input) {
     var cloudFile = cloudFileController.add(input);
-    var entity = Template.builder().file(cloudFile).adminOnly(input.adminOnly).build();
+    var entity = new Template();
+    entity.file = cloudFile;
+    entity.adminOnly = input.adminOnly;
     entity.persist();
     return entity;
   }

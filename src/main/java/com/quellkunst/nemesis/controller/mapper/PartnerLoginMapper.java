@@ -7,7 +7,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Optional;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Qualifier;
 
 @Mapper(config = QuarkusMappingConfig.class)
@@ -20,6 +22,11 @@ public interface PartnerLoginMapper {
   default PartnerLogin getOrCreate(PartnerLoginDto dto) {
     Optional<PartnerLogin> maybe = PartnerLogin.findByIdOptional(dto.getId());
     return maybe.orElseGet(() -> newEntity(dto));
+  }
+
+  @AfterMapping
+  default void persist(@MappingTarget PartnerLogin entity) {
+    entity.persist();
   }
 
   @Qualifier

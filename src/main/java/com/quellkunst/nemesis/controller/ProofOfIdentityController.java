@@ -14,7 +14,9 @@ public class ProofOfIdentityController {
   public ProofOfIdentity add(ProofOfIdentityUploadDto dto) {
     var client = clientRepository.byId(dto.clientId);
     var cloudFile = cloudFileController.add(dto);
-    var proofOfIdentity = ProofOfIdentity.builder().type(dto.type).file(cloudFile).build();
+    var proofOfIdentity = new ProofOfIdentity();
+    proofOfIdentity.type = dto.type;
+    proofOfIdentity.file = cloudFile;
     proofOfIdentity.persist();
     client.proofOfIdentities.add(proofOfIdentity);
     return proofOfIdentity;

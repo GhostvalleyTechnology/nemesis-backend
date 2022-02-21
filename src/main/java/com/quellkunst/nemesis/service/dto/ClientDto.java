@@ -25,7 +25,7 @@ public class ClientDto extends AbstractPersonDto {
   String iban;
   String bic;
   GenericPersonDto partner;
-  List<GenericPersonDto> children;
+  List<GenericPersonDto> children = Collections.emptyList();
   List<ClientContractDto> contracts = Collections.emptyList();
   List<ClientDocumentDto> documents = Collections.emptyList();
   List<ProofOfIdentityDto> proofOfIdentities = Collections.emptyList();

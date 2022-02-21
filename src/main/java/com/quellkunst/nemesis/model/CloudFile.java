@@ -5,7 +5,6 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Embeddable
@@ -16,7 +15,6 @@ import lombok.NoArgsConstructor;
 })
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class CloudFile {
   public String objectName;
   public String fileName;

@@ -21,13 +21,15 @@ import org.mapstruct.*;
       EmployeeMapper.class
     })
 public interface ClientMapper {
-  @Mapping(target = Client_.SUPERVISOR, source = Client_.SUPERVISOR + "." + Employee_.NAME)
+  @Mappings({
+    @Mapping(target = Client_.SUPERVISOR, source = Client_.SUPERVISOR + "." + Employee_.NAME)
+  })
   ClientDto toDto(Client client);
 
   @Mappings({
     @Mapping(target = Client_.SUPERVISOR, qualifiedBy = EmployeeMapper.GetEmployeeByContext.class),
-    @Mapping(target = Client_.CLIENT_CONTRACTS, ignore = true),
-    @Mapping(target = Client_.CLIENT_DOCUMENTS, ignore = true),
+    @Mapping(target = Client_.CONTRACTS, ignore = true),
+    @Mapping(target = Client_.DOCUMENTS, ignore = true),
     @Mapping(target = Client_.PROOF_OF_IDENTITIES, ignore = true)
   })
   Client newEntity(ClientDto dto);
@@ -40,8 +42,8 @@ public interface ClientMapper {
     @Mapping(
         target = Client_.CHILDREN,
         qualifiedBy = GenericPersonMapper.GetOrCreateGenericPerson.class),
-    @Mapping(target = Client_.CLIENT_CONTRACTS, ignore = true),
-    @Mapping(target = Client_.CLIENT_DOCUMENTS, ignore = true),
+    @Mapping(target = Client_.CONTRACTS, ignore = true),
+    @Mapping(target = Client_.DOCUMENTS, ignore = true),
     @Mapping(target = Client_.PROOF_OF_IDENTITIES, ignore = true),
   })
   void updateEntity(ClientDto dto, @MappingTarget Client client);

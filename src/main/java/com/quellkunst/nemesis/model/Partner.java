@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.SortedSet;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -12,7 +11,6 @@ import org.hibernate.annotations.SortNatural;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 public class Partner extends EntityBase {
   @Column(unique = true)

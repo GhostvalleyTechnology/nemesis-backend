@@ -8,12 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 public class Reminder extends EntityBase {
   @ManyToOne public Employee employee;
@@ -29,22 +27,22 @@ public class Reminder extends EntityBase {
   public boolean sent;
 
   public static void createNewClientReminders(Client client) {
-    Reminder.builder()
-        .employee(client.supervisor)
-        .type(ReminderType.service)
-        .name("Polizzenservice")
-        .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
-        .due(LocalDate.now().plusWeeks(3))
-        .build()
-        .persist();
-    Reminder.builder()
-        .employee(client.supervisor)
-        .type(ReminderType.service)
-        .name("Jahresservice")
-        .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
-        .due(LocalDate.now().plusYears(1))
-        .build()
-        .persist();
+    var policyService = new Reminder();
+    policyService.employee = (client.supervisor);
+    policyService.type = (ReminderType.service);
+    policyService.name = ("Polizzenservice");
+    policyService.text =
+        (String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName));
+    policyService.due = (LocalDate.now().plusWeeks(3));
+    policyService.persist();
+    var annualService = new Reminder();
+    annualService.employee = (client.supervisor);
+    annualService.type = (ReminderType.service);
+    annualService.name = ("Jahresservice");
+    annualService.text =
+        (String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName));
+    annualService.due = (LocalDate.now().plusYears(1));
+    annualService.persist();
   }
 
   public static List<Reminder> getDueToday() {

@@ -16,7 +16,8 @@ public class ClientContractController {
 
   public ClientContract add(ClientContractDto dto) {
     var entity = mapper.newEntity(dto);
-    entity.client.clientContracts.add(entity);
+    entity.client.contracts.add(entity);
+    entity.client.persist();
     return entity;
   }
 
@@ -36,7 +37,7 @@ public class ClientContractController {
   }
 
   public void delete(ClientContract contract) {
-    contract.client.clientContracts.remove(contract);
+    contract.client.contracts.remove(contract);
     if (contract.policyRequest != null) {
       cloudFileController.delete(contract.policyRequest);
     }

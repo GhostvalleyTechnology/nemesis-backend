@@ -3,10 +3,7 @@ package com.quellkunst.nemesis.controller.mapper;
 import com.quellkunst.nemesis.model.ClientContract;
 import com.quellkunst.nemesis.model.ClientContract_;
 import com.quellkunst.nemesis.service.dto.ClientContractDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Mappings;
+import org.mapstruct.*;
 
 @Mapper(
     config = QuarkusMappingConfig.class,
@@ -48,4 +45,9 @@ public interface ClientContractMapper {
     @Mapping(target = ClientContract_.POLICY, ignore = true),
   })
   void updateEntity(ClientContractDto dto, @MappingTarget ClientContract entity);
+
+  @AfterMapping
+  default void persist(@MappingTarget ClientContract entity) {
+    entity.persist();
+  }
 }

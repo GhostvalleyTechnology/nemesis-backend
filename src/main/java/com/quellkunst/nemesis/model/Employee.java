@@ -6,12 +6,10 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 public class Employee extends EntityBase {
   public String name;

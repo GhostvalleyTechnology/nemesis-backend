@@ -2,12 +2,10 @@ package com.quellkunst.nemesis.model;
 
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 public class ClientContract extends EntityBase {
   @ManyToOne public Client client;
