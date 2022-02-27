@@ -17,8 +17,8 @@ public class ProofOfIdentityController {
     var proofOfIdentity = new ProofOfIdentity();
     proofOfIdentity.type = dto.type;
     proofOfIdentity.file = cloudFile;
-    proofOfIdentity.persist();
-    client.proofOfIdentities.add(proofOfIdentity);
+    client.addProofOfIdentity(proofOfIdentity);
+    client.persist();
     return proofOfIdentity;
   }
 

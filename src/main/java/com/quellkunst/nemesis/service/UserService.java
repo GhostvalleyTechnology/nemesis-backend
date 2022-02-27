@@ -2,6 +2,7 @@ package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.controller.mapper.EmployeeMapper;
 import com.quellkunst.nemesis.model.*;
+import com.quellkunst.nemesis.repository.EmployeeRepository;
 import com.quellkunst.nemesis.security.AppContext;
 import com.quellkunst.nemesis.service.dto.EmployeeDto;
 import io.quarkus.runtime.LaunchMode;
@@ -18,6 +19,7 @@ public class UserService {
 
   @Inject AppContext context;
   @Inject EmployeeMapper employeeMapper;
+  @Inject EmployeeRepository employeeRepository;
 
   @GET
   public EmployeeDto get() {
@@ -28,7 +30,7 @@ public class UserService {
   }
 
   private void setup() {
-    if (Employee.findByEmail("admin@quellkunst.com").isPresent()) {
+    if (employeeRepository.findByEmail("admin@quellkunst.com").isPresent()) {
       return;
     }
 

@@ -1,8 +1,13 @@
 package com.quellkunst.nemesis.service;
 
+import com.quellkunst.nemesis.controller.mapper.ClientContractMapper;
+import com.quellkunst.nemesis.controller.mapper.ClientMapper;
 import com.quellkunst.nemesis.controller.mapper.EmployeeMapper;
+import com.quellkunst.nemesis.model.ClientContract;
+import com.quellkunst.nemesis.repository.ClientContractRepository;
 import com.quellkunst.nemesis.repository.EmployeeRepository;
 import com.quellkunst.nemesis.security.Guard;
+import com.quellkunst.nemesis.service.dto.ClientContractWithPersonalInformationDto;
 import com.quellkunst.nemesis.service.dto.EmployeeDto;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +29,9 @@ public class EmployeeService {
   @Inject AppResponse appResponse;
   @Inject EmployeeRepository repository;
   @Inject EmployeeMapper mapper;
+  @Inject ClientContractRepository clientContractRepository;
+  @Inject ClientContractMapper clientContractMapper;
+  @Inject ClientMapper clientMapper;
 
   @POST
   @Path("/add")
@@ -50,5 +58,22 @@ public class EmployeeService {
   public List<EmployeeDto> list() {
     return guard.asAdmin(
         () -> repository.streamAll().map(mapper::toDto).collect(Collectors.toList()));
+  }
+
+  @GET
+  @Path("/contracts")
+  public List<ClientContractWithPersonalInformationDto> contracts() {
+    return clientContractRepository
+        .listOfAllClients()
+        .map(this::toContractWithPersonalDto)
+        .collect(Collectors.toList());
+  }
+
+  private ClientContractWithPersonalInformationDto toContractWithPersonalDto(
+      ClientContract clientContract) {
+    var dto = new ClientContractWithPersonalInformationDto();
+    dto.setContractDto(clientContractMapper.toDto(clientContract));
+    dto.setClientDto(clientMapper.toGenericDto(clientContract.client));
+    return dto;
   }
 }

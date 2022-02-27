@@ -3,6 +3,7 @@ package com.quellkunst.nemesis.security;
 import static com.quellkunst.nemesis.security.ExceptionSupplier.unauthorizedException;
 
 import com.quellkunst.nemesis.model.Employee;
+import com.quellkunst.nemesis.repository.EmployeeRepository;
 import io.quarkus.oidc.IdToken;
 import io.quarkus.runtime.LaunchMode;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 @ApplicationScoped
 public class AppContext {
   @Inject @IdToken Instance<JsonWebToken> idToken;
+  @Inject EmployeeRepository employeeRepository;
 
   public String getEmail() {
     if (LaunchMode.current().isDevOrTest()) {
@@ -25,6 +27,6 @@ public class AppContext {
   }
 
   public Employee getCurrentEmployee() {
-    return Employee.getByEmail(getEmail());
+    return employeeRepository.getByEmail(getEmail());
   }
 }

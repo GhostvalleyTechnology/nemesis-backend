@@ -6,6 +6,7 @@ import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.Client_;
 import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.AppContext;
+import com.quellkunst.nemesis.security.EmployeeCheck;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientDto;
 import java.util.List;
@@ -60,14 +61,19 @@ public class ClientService {
   @Path("/get/{id}")
   public ClientDto get(@PathParam long id) {
     var client = repository.byId(id);
-    return mapper.toDto(client);
+    return guard.asEmployee(clientEmployeeCheck(client), () -> mapper.toDto(client));
   }
 
   @POST
   @Path("/update")
   public Response update(ClientDto dto) {
-    controller.update(dto);
+    var client = repository.byId(dto.getId());
+    guard.asEmployee(clientEmployeeCheck(client), () -> controller.update(dto));
     return appResponse.ok();
+  }
+
+  private EmployeeCheck clientEmployeeCheck(Client client) {
+    return () -> client.supervisor;
   }
 
   @DELETE

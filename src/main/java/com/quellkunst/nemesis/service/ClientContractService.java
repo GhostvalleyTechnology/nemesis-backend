@@ -4,6 +4,7 @@ import com.quellkunst.nemesis.controller.ClientContractController;
 import com.quellkunst.nemesis.controller.mapper.ClientContractMapper;
 import com.quellkunst.nemesis.model.ClientContract;
 import com.quellkunst.nemesis.repository.ClientContractRepository;
+import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientContractDto;
 import com.quellkunst.nemesis.service.dto.ClientContractUploadDto;
@@ -20,6 +21,7 @@ import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 public class ClientContractService {
   @Inject Guard guard;
   @Inject AppResponse appResponse;
+  @Inject ClientRepository clientRepository;
   @Inject ClientContractController controller;
   @Inject ClientContractRepository repository;
   @Inject ClientContractMapper mapper;
@@ -27,7 +29,9 @@ public class ClientContractService {
   @POST
   @Path("/add")
   public ClientContractDto add(ClientContractDto dto) {
-    return mapper.toDto(controller.add(dto));
+    return guard.asEmployee(
+        () -> clientRepository.byId(dto.getClientId()).supervisor,
+        () -> mapper.toDto(controller.add(dto)));
   }
 
   @POST

@@ -21,12 +21,12 @@ public class Partner extends EntityBase {
   public String iban;
   public String bic;
 
-  @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+  @JoinColumn(name = "partner_id")
   public List<PartnerContact> contacts;
 
-  @OneToMany
-  @LazyCollection(LazyCollectionOption.FALSE)
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+  @JoinColumn(name = "partner_id")
   public List<PartnerLogin> logins;
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

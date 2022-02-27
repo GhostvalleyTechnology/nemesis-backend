@@ -2,6 +2,7 @@ package com.quellkunst.nemesis.model;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class ProofOfIdentity extends EntityBase {
-  @ManyToOne public Client client;
+  @ManyToOne(fetch = FetchType.LAZY)
+  public Client client;
+
   public ProofOfIdentityType type;
   @Embedded public CloudFile file;
 

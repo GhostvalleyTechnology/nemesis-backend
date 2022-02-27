@@ -1,10 +1,11 @@
 package com.quellkunst.nemesis.model;
 
-import static com.quellkunst.nemesis.security.ExceptionSupplier.forbiddenException;
-
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -12,19 +13,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Employee extends EntityBase {
-  public String name;
-
   @Column(unique = true)
   public String email;
 
+  public String name;
   public boolean admin;
 
-  public static Optional<Employee> findByEmail(String email) {
-    return find(Employee_.EMAIL, email).firstResultOptional();
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = Reminder_.EMPLOYEE)
+  public List<Reminder> reminder = new ArrayList<>();
+
+  public void addReminder(Reminder r) {
+    reminder.add(r);
+    r.employee = this;
   }
 
-  public static Employee getByEmail(String email) {
-    return findByEmail(email)
-        .orElseThrow(forbiddenException("E-Mail '" + email + "' not registered."));
+  public void removeReminder(Reminder r) {
+    reminder.remove(r);
+    r.employee = null;
   }
 }

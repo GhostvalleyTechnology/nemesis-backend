@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @RegisterForReflection
 public class CloudFileDto {
-  private String objectName;
   private String fileName;
   private String fileExtension;
 }

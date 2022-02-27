@@ -16,7 +16,7 @@ public class ClientContractController {
 
   public ClientContract add(ClientContractDto dto) {
     var entity = mapper.newEntity(dto);
-    entity.client.contracts.add(entity);
+    entity.client.addContract(entity);
     entity.client.persist();
     return entity;
   }

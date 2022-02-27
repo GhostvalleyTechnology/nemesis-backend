@@ -28,21 +28,20 @@ public class Reminder extends EntityBase {
 
   public static void createNewClientReminders(Client client) {
     var policyService = new Reminder();
-    policyService.employee = (client.supervisor);
-    policyService.type = (ReminderType.service);
-    policyService.name = ("Polizzenservice");
+    policyService.type = ReminderType.service;
+    policyService.name = "Polizzenservice";
     policyService.text =
-        (String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName));
-    policyService.due = (LocalDate.now().plusWeeks(3));
-    policyService.persist();
+        String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName);
+    policyService.due = LocalDate.now().plusWeeks(3);
+    client.supervisor.addReminder(policyService);
     var annualService = new Reminder();
-    annualService.employee = (client.supervisor);
-    annualService.type = (ReminderType.service);
-    annualService.name = ("Jahresservice");
+    annualService.type = ReminderType.service;
+    annualService.name = "Jahresservice";
     annualService.text =
-        (String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName));
-    annualService.due = (LocalDate.now().plusYears(1));
-    annualService.persist();
+        String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName);
+    annualService.due = LocalDate.now().plusYears(1);
+    client.supervisor.addReminder(annualService);
+    client.supervisor.persist();
   }
 
   public static List<Reminder> getDueToday() {
