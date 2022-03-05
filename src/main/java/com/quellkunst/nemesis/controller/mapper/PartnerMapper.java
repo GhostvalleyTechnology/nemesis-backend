@@ -47,6 +47,11 @@ public interface PartnerMapper {
   })
   void updateEntity(PartnerDto dto, @MappingTarget Partner entity);
 
+  @AfterMapping
+  default void persist(@MappingTarget Partner entity) {
+    entity.persist();
+  }
+
   @GetPartnerThroughReferenceDto
   default Partner get(PartnerReferenceDto dto) {
     return CDI.current().select(PartnerRepository.class).get().findById(dto.getId());
