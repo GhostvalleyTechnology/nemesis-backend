@@ -3,6 +3,7 @@ package com.quellkunst.nemesis.controller;
 import com.quellkunst.nemesis.model.ClientDocument;
 import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.service.dto.ClientDocumentUploadDto;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -20,6 +21,7 @@ public class ClientDocumentController {
     clientDocument.type = dto.type;
     client.addDocument(clientDocument);
     client.persist();
+    clientDocument.persist();
     return clientDocument;
   }
 

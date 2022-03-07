@@ -19,6 +19,7 @@ public class ProofOfIdentityController {
     proofOfIdentity.file = cloudFile;
     client.addProofOfIdentity(proofOfIdentity);
     client.persist();
+    proofOfIdentity.persist();
     return proofOfIdentity;
   }
 

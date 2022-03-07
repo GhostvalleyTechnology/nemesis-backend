@@ -2,10 +2,11 @@ package com.quellkunst.nemesis.service.dto;
 
 import com.quellkunst.nemesis.model.PaymentFrequency;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter

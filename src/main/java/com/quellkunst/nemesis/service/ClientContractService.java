@@ -8,13 +8,14 @@ import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientContractDto;
 import com.quellkunst.nemesis.service.dto.ClientContractUploadDto;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 @Path("/client-contract")
 @Transactional
@@ -37,21 +38,23 @@ public class ClientContractService {
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/upload-policy")
-  public Response uploadPolicy(@MultipartForm ClientContractUploadDto dto) {
-    guard.asEmployee(
-        () -> repository.byId(dto.clientContractId).client.supervisor,
-        () -> controller.uploadPolicy(dto));
-    return appResponse.ok();
+  public ClientContractDto uploadPolicy(@MultipartForm ClientContractUploadDto dto) {
+    var entity =
+        guard.asEmployee(
+            () -> repository.byId(dto.clientContractId).client.supervisor,
+            () -> controller.uploadPolicy(dto));
+    return mapper.toDto(entity);
   }
 
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/upload-policy-request")
-  public Response uploadPolicyRequest(@MultipartForm ClientContractUploadDto dto) {
-    guard.asEmployee(
-        () -> repository.byId(dto.clientContractId).client.supervisor,
-        () -> controller.uploadPolicyRequest(dto));
-    return appResponse.ok();
+  public ClientContractDto uploadPolicyRequest(@MultipartForm ClientContractUploadDto dto) {
+    var entity =
+        guard.asEmployee(
+            () -> repository.byId(dto.clientContractId).client.supervisor,
+            () -> controller.uploadPolicyRequest(dto));
+    return mapper.toDto(entity);
   }
 
   @POST

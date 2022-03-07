@@ -3,15 +3,16 @@ package com.quellkunst.nemesis.controller.mapper;
 import com.quellkunst.nemesis.model.PartnerServiceType;
 import com.quellkunst.nemesis.security.ExceptionSupplier;
 import com.quellkunst.nemesis.service.dto.PartnerServiceTypeDto;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Qualifier;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Optional;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Qualifier;
 
 @Mapper(config = QuarkusMappingConfig.class)
 public interface PartnerServiceTypeMapper {
@@ -21,6 +22,9 @@ public interface PartnerServiceTypeMapper {
 
   @GetPartnerServiceType
   default PartnerServiceType get(PartnerServiceTypeDto dto) {
+    if (dto == null) {
+      return null;
+    }
     Optional<PartnerServiceType> maybe = PartnerServiceType.findByIdOptional(dto.getId());
     return maybe.orElseThrow(ExceptionSupplier.notFoundException("Service not found!"));
   }

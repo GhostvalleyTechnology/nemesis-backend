@@ -5,6 +5,7 @@ import com.quellkunst.nemesis.model.ClientContract;
 import com.quellkunst.nemesis.repository.ClientContractRepository;
 import com.quellkunst.nemesis.service.dto.ClientContractDto;
 import com.quellkunst.nemesis.service.dto.ClientContractUploadDto;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -21,19 +22,27 @@ public class ClientContractController {
     return entity;
   }
 
-  public void uploadPolicy(ClientContractUploadDto dto) {
+  public ClientContract uploadPolicy(ClientContractUploadDto dto) {
     var entity = repository.byId(dto.clientContractId);
     entity.policy = cloudFileController.add(dto);
+    return entity;
   }
 
-  public void uploadPolicyRequest(ClientContractUploadDto dto) {
+  public ClientContract uploadPolicyRequest(ClientContractUploadDto dto) {
     var entity = repository.byId(dto.clientContractId);
     entity.policyRequest = cloudFileController.add(dto);
+    return entity;
   }
 
   public void update(ClientContractDto dto) {
     var entity = repository.byId(dto.getId());
     mapper.updateEntity(dto, entity);
+    if (dto.getPolicy() == null) {
+      entity.policy = null;
+    }
+    if (dto.getPolicyRequest() == null) {
+      entity.policyRequest = null;
+    }
   }
 
   public void delete(ClientContract contract) {

@@ -4,6 +4,7 @@ import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.Client_;
 import com.quellkunst.nemesis.model.Employee_;
 import com.quellkunst.nemesis.service.dto.ClientDto;
+import com.quellkunst.nemesis.service.dto.ClientReferenceDto;
 import com.quellkunst.nemesis.service.dto.GenericPersonDto;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,7 +19,6 @@ import org.mapstruct.*;
       ClientContractMapper.class,
       ClientDocumentMapper.class,
       ProofOfIdentityMapper.class,
-      ClientMapper.class,
       EmployeeMapper.class
     })
 public interface ClientMapper {
@@ -28,6 +28,11 @@ public interface ClientMapper {
   ClientDto toDto(Client client);
 
   GenericPersonDto toGenericDto(Client client);
+
+  @Mappings({
+    @Mapping(target = Client_.SUPERVISOR, source = Client_.SUPERVISOR + "." + Employee_.NAME)
+  })
+  ClientReferenceDto toReferenceDto(Client client);
 
   @Mappings({
     @Mapping(target = Client_.SUPERVISOR, qualifiedBy = EmployeeMapper.GetEmployeeByContext.class),

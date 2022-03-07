@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 public class Reminder extends EntityBase {
-  @ManyToOne public Employee employee;
+  @ManyToOne(optional = false)
+  public Employee employee;
 
   @Column(nullable = false)
   public ReminderType type;

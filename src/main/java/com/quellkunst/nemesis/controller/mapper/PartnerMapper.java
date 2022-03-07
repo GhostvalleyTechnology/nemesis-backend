@@ -5,12 +5,13 @@ import com.quellkunst.nemesis.model.Partner_;
 import com.quellkunst.nemesis.repository.PartnerRepository;
 import com.quellkunst.nemesis.service.dto.PartnerDto;
 import com.quellkunst.nemesis.service.dto.PartnerReferenceDto;
+import org.mapstruct.*;
+
+import javax.enterprise.inject.spi.CDI;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import javax.enterprise.inject.spi.CDI;
-import org.mapstruct.*;
 
 @Mapper(
     config = QuarkusMappingConfig.class,
@@ -54,6 +55,9 @@ public interface PartnerMapper {
 
   @GetPartnerThroughReferenceDto
   default Partner get(PartnerReferenceDto dto) {
+    if (dto == null) {
+      return null;
+    }
     return CDI.current().select(PartnerRepository.class).get().findById(dto.getId());
   }
 

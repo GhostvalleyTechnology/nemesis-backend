@@ -17,8 +17,12 @@ public class ClientContract extends EntityBase {
   public long paymentValue;
   public PaymentFrequency paymentFrequency;
   public LocalDate contractDate;
-  @ManyToOne public Partner contractor;
-  @ManyToOne public PartnerServiceType serviceType;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  public Partner contractor;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  public PartnerServiceType serviceType;
 
   @AttributeOverrides({
     @AttributeOverride(
