@@ -1,13 +1,17 @@
 package com.quellkunst.nemesis.service;
 
+import com.quellkunst.nemesis.controller.ClientController;
+import com.quellkunst.nemesis.controller.mapper.ClientMapper;
 import com.quellkunst.nemesis.model.Client;
 import com.quellkunst.nemesis.model.Client_;
-import com.quellkunst.nemesis.model.Reminder;
+import com.quellkunst.nemesis.repository.ClientRepository;
 import com.quellkunst.nemesis.security.AppContext;
+import com.quellkunst.nemesis.security.EmployeeCheck;
 import com.quellkunst.nemesis.security.Guard;
 import com.quellkunst.nemesis.service.dto.ClientDto;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
-
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.DELETE;
@@ -17,9 +21,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.eclipse.microprofile.openapi.annotations.headers.Header;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Transactional
 @Path(ClientService.PATH_PART)
@@ -27,7 +31,11 @@ public class ClientService {
   public static final String PATH_PART = "/client";
 
   @Inject AppContext context;
+  @Inject AppResponse appResponse;
   @Inject Guard guard;
+  @Inject ClientRepository repository;
+  @Inject ClientController controller;
+  @Inject ClientMapper mapper;
 
   @GET
   @Path("/list-all")
@@ -35,54 +43,55 @@ public class ClientService {
     return guard.asAdmin(
         () -> {
           Stream<Client> stream = Client.streamAll();
-          return stream.map(ClientDto::of).collect(Collectors.toList());
+          return stream.map(mapper::toDto).collect(Collectors.toList());
         });
   }
 
   @POST
   @Path("/add")
+  @APIResponse(
+      responseCode = "201",
+      headers = {@Header(name = "location")})
   public Response add(ClientDto dto, @Context UriInfo uriInfo) {
-    Client client = dto.getEntity();
-    client.supervisor = context.getCurrentEmployee();
-    client.persist();
-    Reminder.createNewClientReminders(client);
-    return AppResponse.created(PATH_PART, uriInfo, client);
+    var client = controller.add(dto);
+    return appResponse.created(PATH_PART, uriInfo, client);
   }
 
   @GET
   @Path("/get/{id}")
   public ClientDto get(@PathParam long id) {
-    return ClientDto.of(Client.byId(id));
+    var client = repository.byId(id);
+    return guard.asEmployee(clientEmployeeCheck(client), () -> mapper.toDto(client));
   }
 
   @POST
   @Path("/update")
-  public Response update(ClientDto client) {
-    client.updateEntity();
-    return AppResponse.ok();
+  public Response update(ClientDto dto) {
+    var client = repository.byId(dto.getId());
+    guard.asEmployee(clientEmployeeCheck(client), () -> controller.update(dto));
+    return appResponse.ok();
+  }
+
+  private EmployeeCheck clientEmployeeCheck(Client client) {
+    return () -> client.supervisor;
   }
 
   @DELETE
   @Path("/delete/{clientId}")
   public Response delete(@PathParam long clientId) {
-    guard.asAdmin(
-        () -> {
-          var client = Client.byId(clientId);
-          client.deleted = true;
-          client.persist();
-        });
-
-    return AppResponse.ok();
+    var client = repository.byId(clientId);
+    guard.asAdmin(() -> controller.delete(client));
+    return appResponse.ok();
   }
 
   @GET
   @Path("/list")
   public List<ClientDto> list() {
-    Stream<Client> stream =
-        Client.stream(
+    return repository.stream(
             String.format(
                 "from Client where %s = false and %s = ?1", Client_.DELETED, Client_.SUPERVISOR),
-            context.getCurrentEmployee());
-    return stream.map(ClientDto::of).collect(Collectors.toList());
+            context.getCurrentEmployee())
+        .map(mapper::toDto)
+        .collect(Collectors.toList());
   }
 }

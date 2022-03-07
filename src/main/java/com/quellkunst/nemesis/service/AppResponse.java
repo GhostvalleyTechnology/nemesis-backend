@@ -1,26 +1,27 @@
 package com.quellkunst.nemesis.service;
 
 import com.quellkunst.nemesis.Identifiable;
-import com.quellkunst.nemesis.model.File;
-import com.quellkunst.nemesis.model.FileEntityBase;
-import com.quellkunst.nemesis.service.dto.FileDto;
-
+import com.quellkunst.nemesis.model.CloudFile;
+import com.quellkunst.nemesis.security.GoogleStorage;
+import java.net.URI;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
+@ApplicationScoped
 public class AppResponse {
-  private AppResponse() {}
+  @Inject GoogleStorage googleStorage;
 
-  public static Response ok() {
+  public Response ok() {
     return Response.ok().build();
   }
 
-  public static Response deleted(boolean deleted) {
+  public Response deleted(boolean deleted) {
     return Response.status(deleted ? Response.Status.OK : Response.Status.NOT_FOUND).build();
   }
 
-  public static Response created(String pathPart, UriInfo uriInfo, Identifiable identifiable) {
+  public Response created(String pathPart, UriInfo uriInfo, Identifiable identifiable) {
     var baseUri = uriInfo.getBaseUri().toString();
     // substring 5: length -1 - "/api"
     var location =
@@ -28,8 +29,8 @@ public class AppResponse {
     return Response.created(URI.create(location)).build();
   }
 
-  public static FileDto fileDownload(FileEntityBase entityBase) {
-    // var base64Encoded = Base64.getEncoder().encodeToString(file.data);
-    return FileDto.of(File.byId(entityBase.fileId));
+  public Response fileDownload(CloudFile cloudFile) {
+    var url = googleStorage.download(cloudFile);
+    return Response.status(Response.Status.OK).entity(url).build();
   }
 }

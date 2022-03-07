@@ -1,20 +1,21 @@
 package com.quellkunst.nemesis.model;
 
 import io.quarkus.mailer.Mail;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-
+import java.time.LocalDate;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
-import java.time.LocalDate;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@Entity
+@AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Reminder extends EntityBase {
-  @ManyToOne public Employee employee;
+  @ManyToOne(optional = false)
+  public Employee employee;
 
   @Column(nullable = false)
   public ReminderType type;
@@ -26,41 +27,22 @@ public class Reminder extends EntityBase {
   public boolean done;
   public boolean sent;
 
-  @Builder
-  public Reminder(
-      Employee employee,
-      ReminderType type,
-      String name,
-      String text,
-      LocalDate due,
-      Client client) {
-    this.employee = employee;
-    this.type = type;
-    this.name = name;
-    this.text = text;
-    this.due = due;
-    this.client = client;
-    this.done = false;
-    this.sent = false;
-  }
-
   public static void createNewClientReminders(Client client) {
-    Reminder.builder()
-        .employee(client.supervisor)
-        .type(ReminderType.service)
-        .name("Polizzenservice")
-        .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
-        .due(LocalDate.now().plusWeeks(3))
-        .build()
-        .persist();
-    Reminder.builder()
-        .employee(client.supervisor)
-        .type(ReminderType.service)
-        .name("Jahresservice")
-        .text(String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName))
-        .due(LocalDate.now().plusYears(1))
-        .build()
-        .persist();
+    var policyService = new Reminder();
+    policyService.type = ReminderType.service;
+    policyService.name = "Polizzenservice";
+    policyService.text =
+        String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName);
+    policyService.due = LocalDate.now().plusWeeks(3);
+    client.supervisor.addReminder(policyService);
+    var annualService = new Reminder();
+    annualService.type = ReminderType.service;
+    annualService.name = "Jahresservice";
+    annualService.text =
+        String.format("Das Service für %s %s ist fällig!", client.firstName, client.lastName);
+    annualService.due = LocalDate.now().plusYears(1);
+    client.supervisor.addReminder(annualService);
+    client.supervisor.persist();
   }
 
   public static List<Reminder> getDueToday() {

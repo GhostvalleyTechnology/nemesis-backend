@@ -1,9 +1,32 @@
 package com.quellkunst.nemesis.security;
 
+import static com.quellkunst.nemesis.security.ExceptionSupplier.unauthorizedException;
+
 import com.quellkunst.nemesis.model.Employee;
+import com.quellkunst.nemesis.repository.EmployeeRepository;
+import io.quarkus.oidc.IdToken;
+import io.quarkus.runtime.LaunchMode;
+import java.util.Optional;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import org.eclipse.microprofile.jwt.Claims;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
-public interface AppContext {
-  String getEmail();
+@ApplicationScoped
+public class AppContext {
+  @Inject @IdToken Instance<JsonWebToken> idToken;
+  @Inject EmployeeRepository employeeRepository;
 
-  Employee getCurrentEmployee();
+  public String getEmail() {
+    if (LaunchMode.current().isDevOrTest()) {
+      return "admin@quellkunst.com";
+    }
+    Optional<String> jwtEmail = idToken.get().claim(Claims.email);
+    return jwtEmail.orElseThrow(unauthorizedException("E-Mail Address is not configured!"));
+  }
+
+  public Employee getCurrentEmployee() {
+    return employeeRepository.getByEmail(getEmail());
+  }
 }

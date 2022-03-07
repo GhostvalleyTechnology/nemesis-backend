@@ -1,10 +1,29 @@
 package com.quellkunst.nemesis.security;
 
+import io.quarkus.security.UnauthorizedException;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 /**
  * Currently, as we do not support role authentication through auth0, this interface provides a
  * simple check if the current use has the needed authority.
  */
-public interface Guard {
+@ApplicationScoped
+public class Guard {
+
+  private final UnauthorizedException INSUFFICIENT_RIGHTS =
+      new UnauthorizedException("Insufficient Rights");
+
+  @Inject AppContext context;
+
+  /**
+   * Checks if the current user has admin rights.
+   *
+   * @return if the current user has admin rights.
+   */
+  public boolean isAdmin() {
+    return "admin@quellkunst.com".equals(context.getEmail()) || context.getCurrentEmployee().admin;
+  }
 
   /**
    * Checks if the current user has admin rights. If so, the action is executed. If not, an
@@ -14,7 +33,12 @@ public interface Guard {
    * @param <T> the incoming command defines the output type
    * @return the type-safe action result
    */
-  <T> T asAdmin(ReturnableRunnable<T> action);
+  public <T> T asAdmin(ReturnableRunnable<T> action) {
+    if (isAdmin()) {
+      return action.run();
+    }
+    throw INSUFFICIENT_RIGHTS;
+  }
 
   /**
    * Checks if the current user has admin rights. If so, the action is executed. If not, an
@@ -22,16 +46,27 @@ public interface Guard {
    *
    * @param action to execute
    */
-  void asAdmin(Runnable action);
+  public void asAdmin(Runnable action) {
+    asAdmin(
+        () -> {
+          action.run();
+          return null;
+        });
+  }
 
-  /**
-   * Checks if the current user has admin rights.
-   *
-   * @return if the current user has admin rights.
-   */
-  boolean isAdmin();
+  public void asEmployee(EmployeeCheck check, Runnable action) {
+    asEmployee(
+        check,
+        () -> {
+          action.run();
+          return null;
+        });
+  }
 
-  void asEmployee(EmployeeCheck check, Runnable action);
-
-  <T> T asEmployee(EmployeeCheck check, ReturnableRunnable<T> action);
+  public <T> T asEmployee(EmployeeCheck check, ReturnableRunnable<T> action) {
+    if (isAdmin() || context.getCurrentEmployee().equals(check.responsibleEmployee())) {
+      return action.run();
+    }
+    throw INSUFFICIENT_RIGHTS;
+  }
 }

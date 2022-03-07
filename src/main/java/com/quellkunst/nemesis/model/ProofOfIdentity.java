@@ -1,28 +1,21 @@
 package com.quellkunst.nemesis.model;
 
-import lombok.Builder;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import java.util.Optional;
-
-import static com.quellkunst.nemesis.security.ExceptionSupplier.notFoundException;
-
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ProofOfIdentity extends FileEntityBase {
+public class ProofOfIdentity extends EntityBase {
+  @ManyToOne(fetch = FetchType.LAZY)
+  public Client client;
+
   public ProofOfIdentityType type;
-
-  @Builder
-  public ProofOfIdentity(String fileName, Long fileId, ProofOfIdentityType type) {
-    super(fileName, fileId);
-    this.type = type;
-  }
-
-  public static ProofOfIdentity byId(long id) {
-    Optional<ProofOfIdentity> maybe = findByIdOptional(id);
-    return maybe.orElseThrow(notFoundException("Could not find requested resource!"));
-  }
+  @Embedded public CloudFile file;
 
   public void removeFromClient() {
     var query =
