@@ -18,4 +18,5 @@ public class PartnerDto extends PartnerReferenceDto {
   String bic;
   List<PartnerLoginDto> logins = Collections.emptyList();
   List<PartnerContactDto> contacts = Collections.emptyList();
+  List<PartnerIntermediaryNumberDto> intermediaryNumbers = Collections.emptyList();
 }

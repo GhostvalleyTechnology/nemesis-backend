@@ -1,15 +1,23 @@
 package com.quellkunst.nemesis.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Client extends Person {
+
+  @Generated(GenerationTime.INSERT)
+  @Column(columnDefinition = "serial", updatable = false)
+  public Long clientNumber;
+
   @ManyToOne(optional = false)
   public Employee supervisor;
 

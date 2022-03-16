@@ -13,6 +13,8 @@ import org.hibernate.annotations.SortNatural;
 @NoArgsConstructor
 @Entity
 public class Partner extends EntityBase {
+  public boolean deleted;
+
   @Column(unique = true)
   public String name;
 
@@ -28,6 +30,10 @@ public class Partner extends EntityBase {
   @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
   @JoinColumn(name = "partner_id")
   public List<PartnerLogin> logins;
+
+  @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+  @JoinColumn(name = "partner_id")
+  public List<PartnerIntermediaryNumber> intermediaryNumbers;
 
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(

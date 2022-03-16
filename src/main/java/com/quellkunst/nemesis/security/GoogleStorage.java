@@ -7,13 +7,13 @@ import com.google.cloud.storage.StorageOptions;
 import com.quellkunst.nemesis.model.CloudFile;
 import com.quellkunst.nemesis.service.dto.AbstractFileBasedDto;
 import io.quarkus.logging.Log;
-import io.quarkus.runtime.LaunchMode;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import javax.enterprise.context.ApplicationScoped;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class GoogleStorage {
@@ -40,9 +40,6 @@ public class GoogleStorage {
   }
 
   private Storage getService() {
-    if (LaunchMode.current().isDevOrTest()) {
-      return new DevStorage();
-    }
     return StorageOptions.newBuilder().build().getService();
   }
 

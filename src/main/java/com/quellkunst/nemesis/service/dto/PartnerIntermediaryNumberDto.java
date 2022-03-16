@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @RegisterForReflection
-public class ClientReferenceDto extends AbstractPersonDto {
-  Long clientNumber;
-  String supervisor;
-  boolean deleted;
+public class PartnerIntermediaryNumberDto extends AbstractEntityDto {
+    String description;
+    String number;
 }

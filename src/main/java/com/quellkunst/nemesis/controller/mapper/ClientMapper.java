@@ -43,6 +43,7 @@ public interface ClientMapper {
   Client newEntity(ClientDto dto);
 
   @Mappings({
+    @Mapping(target = Client_.CLIENT_NUMBER, ignore = true),
     @Mapping(target = Client_.SUPERVISOR, ignore = true),
     @Mapping(
         target = Client_.PARTNER,

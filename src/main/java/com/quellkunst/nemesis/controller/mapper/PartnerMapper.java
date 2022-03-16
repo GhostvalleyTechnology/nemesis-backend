@@ -15,7 +15,12 @@ import java.lang.annotation.Target;
 
 @Mapper(
     config = QuarkusMappingConfig.class,
-    uses = {PartnerServiceTypeMapper.class, PartnerLoginMapper.class, PartnerContactMapper.class})
+    uses = {
+      PartnerServiceTypeMapper.class,
+      PartnerLoginMapper.class,
+      PartnerIntermediaryNumberMapper.class,
+      PartnerContactMapper.class
+    })
 public interface PartnerMapper {
   PartnerDto toDto(Partner entity);
 
@@ -31,7 +36,10 @@ public interface PartnerMapper {
         qualifiedBy = PartnerLoginMapper.GetOrCreatePartnerLogin.class),
     @Mapping(
         target = Partner_.CONTACTS,
-        qualifiedBy = PartnerContactMapper.GetOrCreatePartnerContact.class)
+        qualifiedBy = PartnerContactMapper.GetOrCreatePartnerContact.class),
+    @Mapping(
+        target = Partner_.INTERMEDIARY_NUMBERS,
+        qualifiedBy = PartnerIntermediaryNumberMapper.GetOrCreatePartnerIntermediaryNumber.class)
   })
   Partner newEntity(PartnerDto dto);
 
@@ -44,7 +52,10 @@ public interface PartnerMapper {
         qualifiedBy = PartnerLoginMapper.GetOrCreatePartnerLogin.class),
     @Mapping(
         target = Partner_.CONTACTS,
-        qualifiedBy = PartnerContactMapper.GetOrCreatePartnerContact.class)
+        qualifiedBy = PartnerContactMapper.GetOrCreatePartnerContact.class),
+    @Mapping(
+        target = Partner_.INTERMEDIARY_NUMBERS,
+        qualifiedBy = PartnerIntermediaryNumberMapper.GetOrCreatePartnerIntermediaryNumber.class)
   })
   void updateEntity(PartnerDto dto, @MappingTarget Partner entity);
 
